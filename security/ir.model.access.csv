@@ -6,3 +6,5 @@ access_clinic_material_type,clinic.material.type,model_clinic_material_type,base
 access_clinic_material,clinic.material,model_clinic_material,base.group_user,1,1,1,1
 access_clinic_intervention,clinic.intervention,model_clinic_intervention,base.group_user,1,1,1,1
 access_clinic_intervention_type,clinic.intervention.type,model_clinic_intervention_type,base.group_user,1,1,1,1
+access_clinic_vehicule_type,clinic.vehicule.type,model_clinic_vehicule_type,base.group_user,1,1,1,1
+access_clinic_vehicule,clinic.vehicule,model_clinic_vehicule,base.group_user,1,1,1,1

@@ -296,7 +296,7 @@
     <field name="view_mode">tree,form</field>
    </record>
 
-   <menuitem id="vehicule_menu" name="Vehicule" parent="clinic.menu"
+   <menuitem id="vehicule_menu" name="Vehicule" parent="clinic_menu"
    action="action_list_vehicule"/>
 
    <record model="ir.ui.view" id="vehicule_form">

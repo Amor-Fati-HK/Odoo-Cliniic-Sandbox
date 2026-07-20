@@ -15,7 +15,7 @@ class vehicule_type(models.Model):
     name=fields.Char(string="Nom du Type", required=True)
 
     _sql_constraints=[
-        ('name_unique', 'UNIQUE(name)', 'Ce type de materiel existe deja !')
+        ('name_unique', 'UNIQUE(name)', 'Ce type de vehicule existe deja !')
     ]
 
 class vehicule(models.Model):
@@ -24,22 +24,28 @@ class vehicule(models.Model):
 
     name=fields.Char(string="Nom / Modele", required=True)
     description=fields.Text(string="Description")
-    type_id=fields.Many2one('clinic.vehicule.type', String="Type", required=True)
-    matricule=fields.Integer(string="Matricule du vehicule", help="xxxxx-xxx-xx")
+    type_id=fields.Many2one('clinic.vehicule.type', string="Type", required=True)
+    matricule=fields.Char(string="Matricule du vehicule", help="xxxxx-xxx-xx")
     purchase_date=fields.Date(string="Date d'achat")
     price=fields.Float(string="Prix d'achat")
     state=fields.Selection([
         ('available','Disponible'),
         ('in_use','En cours dutilisation'),
         ('repair', 'En maintenance'),
-        ('broken', 'Hors service')
+        ('broken', 'Hors service'),
     ], string="Etat", default='available')
     
 
     @api.constrains('price')
     def _check_price(self):
+        """Check the price validation"""
         for s in self:
             if s.price<0 :
                 raise ValidationError(_("Prix invalide"))
-
-    
+            
+    @api.constrains('matricule')
+    def _check_matricule(self):
+        """Check the matricule validation"""
+        for s in self:
+            if len(s.matricule)!=10:
+                raise ValidationError(_("Matricule non valide"))
