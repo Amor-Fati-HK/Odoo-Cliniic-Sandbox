@@ -1,0 +1,339 @@
+<odoo>
+  <!-- .....................GESTION................................ -->
+  <!-- PATIENT-->
+  <record model="ir.actions.act_window" id="action_list_patient">
+    <field name="name">Patients</field>
+    <field name="res_model">clinic.patient</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <menuitem id="main_clinic_menu" name="Clinic Management"/>
+  <menuitem id="clinic_menu" name="Gestion" parent="main_clinic_menu"/>
+  <menuitem id="patient_menu" name="Patients" parent="clinic_menu" action="action_list_patient" />
+
+  <record model="ir.ui.view" id="patient_view">
+    <field name="name">clinic.patient.form</field>
+    <field name="model">clinic.patient</field>
+    <field name="arch" type="xml">
+      <form string="Patient Form">
+        <sheet>
+          <group>
+            <group>
+              <field name="name"/>
+              <field name="surname"/> 
+              <field name="age"/> 
+              <field name="sexe"/>
+            </group>
+            <group>
+              <field name="height"/>
+              <field name="weight"/>
+              <field name="blood"/>
+              <field name="imc"/>
+            </group>
+          </group>
+          <group>
+            <field name="birthday"/>
+            <field name="birthday_place"/>
+            <field name="profession"/>
+            <field name="sportif"/>
+            <field name="father_name"/>
+            <field name="mother_name"/>
+            <field name="decease"/>
+            <field name="decease_cause"
+                   attrs="{
+                      'invisible':[('decease','=', False)],
+                      'required':[('decease','=', True)]
+                   }"/>
+          </group>
+          <group string="Historique des consultations">
+            <field name="consultation_ids" nolabel="1">
+             <tree string="Consultations" decoration-info="prix_consultation &gt; 2000">
+                <field name="date_consultation" string="Date et Heure"/>
+                <field name="medecin_id" string="Medecin Traitant"/>
+                <field name="diagnostic" string="Diagnostic resume"/>
+                <field name="prix_consultation" string="Montant(DZD)" sum="Total"/>
+              </tree>
+            </field>
+          </group>
+          <group string="Historique des interventions">
+            <field name="intervention_ids" nolabel="1">
+            <tree string="Interventions">
+              <field name="date_intervention" string="Date et Heure"/>
+              <field name="medecin_id" string="Medecin Traitant"/>
+              <field name="type_id" string="Type d'intervention"/>
+            </tree>
+            </field>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record model="ir.ui.view" id="patient_tree">
+    <field name="name">clinic.patient.tree</field>
+    <field name="model">clinic.patient</field>
+    <field name="arch" type="xml">
+      <tree string="Liste des patients">
+        <field name="name"/>
+        <field name="surname"/>
+        <field name="age"/>
+        <field name="sexe"/>
+        <field name="imc"/>
+        <field name="decease"/>
+      </tree>
+    </field>
+  </record>
+
+  <!-- MEDECIN-->
+  <record model="ir.actions.act_window" id="action_list_medecin">
+    <field name="name">Medecin</field>
+    <field name="res_model">clinic.medecin</field>
+    <field name="view_mode">tree,form,graph</field>
+  </record>
+
+  <menuitem id="medecin_menu" name="Medecin" parent="clinic_menu" action="action_list_medecin"/>
+  
+  <record model="ir.ui.view" id="medecin_form_view">
+    <field name="name">clinic.medecin.form</field>
+    <field name="model">clinic.medecin</field>
+    <field name="arch" type="xml">
+      <form string="Doctor Form">
+        <sheet>
+          <group>
+            <group>
+              <field name="name"/>
+              <field name="surname"/>
+              <field name="age"/>
+            </group>
+            <group>
+              <field name="sexe"/>
+              <field name="birthday"/>
+              <field name="birthday_place"/>
+            </group>
+          </group>
+          <group>
+            <field name="service"/>
+            <field name="service_chef"/>
+            <field name="recruit_date"/>
+            <field name="experience_here"/>
+            <field name="salary"/>
+          </group>
+          <group string="Historique">
+            <field name="consultation_ids" nolabel="1">
+              <tree string="Consultations" decoration-info="prix_consultation &gt; 2000">
+                <field name="date_consultation" string="Datre et Heure"/>
+                <field name="patient_id" string="Patient"/>
+                <field name="diagnostic" string="Diagnostic resume"/>
+                <field name="prix_consultation" string="Montant(DZD)" sum="Total"/>
+              </tree>
+            </field>
+          </group>        
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record model="ir.ui.view" id="medecin_tree">
+    <field name="name">clinic.medecin.tree</field>
+    <field name="model">clinic.medecin</field>
+    <field name="arch" type="xml">
+      <tree string="Liste des patients">
+        <field name="name"/>
+        <field name="surname"/>
+        <field name="age"/>
+        <field name="sexe"/>
+        <field name="service"/>
+        <field name="service_chef"/>
+      </tree>
+    </field>
+  </record>
+
+  <record model="ir.ui.view" id="medecin_graph">
+    <field name="name">clinic.medecin.graph</field>
+    <field name="model">clinic.medecin</field>
+    <field name="arch" type="xml">
+      <graph string="Taux de medecin par services" type="bar">
+        <field name="service"/>
+        <field name="medecin_count" type="measure"/>
+      </graph>
+    </field>
+  </record>
+  <!-- CONSULTATIONS-->
+   <record model="ir.actions.act_window" id="action_list_consultation">
+    <field name="name">Consultations</field>
+    <field name="res_model">clinic.consultation</field>
+    <field name="view_mode">tree,form</field>
+   </record>
+
+   <menuitem id="consultation_menu" name="Consultations" parent="clinic_menu" action="action_list_consultation"/>
+
+   <record model="ir.ui.view" id="consultation_form">
+    <field name="name">clinic.consultation.form</field>
+    <field name="model">clinic.consultation</field>
+    <field name="arch" type="xml">
+      <form string="Consultation Form">
+        <sheet>
+          <field name="state" invisible="1"/>
+          <field name="material_count" invisible="1"/>
+          <group>
+            <group>
+              <field name="patient_id"/>
+              <field name="medecin_id"/>
+              <field name="date_consultation"/>
+            </group>
+            <group>
+              <field name="symptoms"/>
+              <field name="temperature"/>
+              <field name="tension"/>
+              <field name="diagnostic"/>
+              <field name="ordonnance"/>
+            </group>
+            <group string="Materiel Medical">
+              <field name="material_ids"
+                     domain="[('state','=','available')]"
+                     options="{'no_create':True, 'no_open':True}"
+                     nolabel="1"
+                     colspan="2">
+                <tree string="Material disponible" editable="bottom">
+                  <field name="name"/>
+                  <field name="type_id"/>
+                  <field name="serial_number"/>
+                </tree>    
+              </field>
+              <div class="o_row" colspan="2">
+                  <button name="action_confirm"
+                          string="Confirmer l'utilisation du materiel"
+                          type="object"
+                          class="oe_highlight"
+                          states="draft"
+                          attrs="{'invisible': ['|', ('state', '!=', 'draft'), ('material_count', '=', 0)]}"/>
+                  <button name="action_done"
+                          string="Liberer le materiel (Fin consultation)"
+                          type="object"
+                          class="btn-success"
+                          states="confirmed"/>
+                </div>
+            </group>
+            <group>
+              <field name="prix_consultation"/>
+            </group>
+          </group>
+        </sheet>
+      </form>
+    </field>
+   </record>
+
+   <record model="ir.ui.view" id="consultation_tree">
+    <field name="name">clinic.consultation.tree</field>
+    <field name="model">clinic.consultation</field>
+    <field name="arch" type="xml">
+      <tree string="Liste des Consultations">
+        <field name="date_consultation"/>
+        <field name="patient_id"/>
+        <field name="medecin_id"/>
+        <field name="diagnostic"/>
+        <field name="prix_consultation" sum="Total"/>
+      </tree>
+    </field>
+   </record>
+
+  <!--MATERIEL-->
+   <record model="ir.actions.act_window" id="action_list_material">
+    <field name="name">Inventaire Materiel</field>
+    <field name="res_model">clinic.material</field>
+    <field name="view_mode">tree,form,kanban</field>
+   </record>
+
+   <menuitem id="material_menu" name="Materiel" parent="clinic_menu"
+   action="action_list_material"/>
+
+   <record model="ir.ui.view" id="material_form_view">
+    <field name="name">clinic.material.form</field>
+    <field name="model">clinic.material</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="type_id" options="{'no_create_edit': False}"/>
+            <field name="serial_number"/>
+          </group>
+          <group>
+            <field name="state"/>
+            <field name="purchase_date"/>
+            <field name="price"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+   </record>
+
+   <record model="ir.ui.view" id="material_tree">
+    <field name="name">clinic.material.tree</field>
+    <field name="model">clinic.material</field>
+    <field name="arch" type="xml">
+      <tree string="Liste des Consultations"
+            decoration-success="state == 'available'"
+            decoration-warning="state == 'in_use'"
+            decoration-danger="state == 'repair'"
+            decoration-muted="state == 'broken'">
+        <field name="name"/>
+        <field name="type_id"/>
+        <field name="serial_number"/>
+        <field name="state"/>
+        <field name="price" sum="Total"/>
+      </tree>
+    </field>
+   </record>
+
+  <!--......................OPERATION............................-->
+  <!--INTERVENTIONS-->
+   <record model="ir.actions.act_window" id="action_list_intervention">
+    <field name="name">Interventions</field>
+    <field name="res_model">clinic.intervention</field>
+    <field name="view_mode">tree,form</field>
+   </record>
+
+   <menuitem id="operation_menu" name="Operation" parent="main_clinic_menu"/>
+   <menuitem id="intervention_menu" name="Intervention" parent="operation_menu" action="action_list_intervention"/>
+
+   <record model="ir.ui.view" id="intervention_form">
+    <field name="name">clinic.intervention.form</field>
+    <field name="model">clinic.intervention</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group>
+            <field name="patient_id"/>
+            <field name="medecin_id"/>
+            <field name="type_id" options="{'no_create_edit': False}"/>
+          </group>
+          <group>
+            <field name="date_intervention"/>
+            <field name="material_ids"/>
+            <field name="patient_state"/>
+          </group>
+          <notebook>
+            <page string="Description">
+              <field name="description" placholder="Entrez la description de l'intervention ici"/>
+            </page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+   </record>
+
+   <record model="ir.ui.view" id="intervention_tree">
+    <field name="name">clinic.intervention.tree</field>
+    <field name="model">clinic.intervention</field>
+    <field name="arch" type="xml">
+      <tree string="Liste des Interventions">
+        <field name="type_id"/>
+        <field name="date_intervention"/>
+        <field name="patient_id"/>
+        <field name="medecin_id"/>
+        <field name="patient_state"/>
+      </tree>
+    </field>
+   </record>
+</odoo>

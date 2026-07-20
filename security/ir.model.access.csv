@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_clinic_patient,clinic.patient,model_clinic_patient,base.group_user,1,1,1,1
+access_clinic_medecin,clinic.medecin,model_clinic_medecin,base.group_user,1,1,1,1
+access_clinic_consultation,clinic.consultation,model_clinic_consultation,base.group_user,1,1,1,1
+access_clinic_material_type,clinic.material.type,model_clinic_material_type,base.group_user,1,1,1,1
+access_clinic_material,clinic.material,model_clinic_material,base.group_user,1,1,1,1
+access_clinic_intervention,clinic.intervention,model_clinic_intervention,base.group_user,1,1,1,1
+access_clinic_intervention_type,clinic.intervention.type,model_clinic_intervention_type,base.group_user,1,1,1,1
