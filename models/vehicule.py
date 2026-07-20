@@ -25,7 +25,7 @@ class vehicule(models.Model):
     name=fields.Char(string="Nom / Modele", required=True)
     description=fields.Text(string="Description")
     type_id=fields.Many2one('clinic.vehicule.type', String="Type", required=True)
-
+    matricule=fields.Integer(string="Matricule du vehicule", help="xxxxx-xxx-xx")
     purchase_date=fields.Date(string="Date d'achat")
     price=fields.Float(string="Prix d'achat")
     state=fields.Selection([
@@ -35,7 +35,7 @@ class vehicule(models.Model):
         ('broken', 'Hors service')
     ], string="Etat", default='available')
     
-    
+
     @api.constrains('price')
     def _check_price(self):
         for s in self:

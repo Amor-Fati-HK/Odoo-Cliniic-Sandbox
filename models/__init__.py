@@ -5,3 +5,4 @@ from . import medecin
 from . import consultation
 from . import materiel
 from . import intervention
+from . import vehicule

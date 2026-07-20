@@ -1,4 +1,7 @@
 <odoo>
+  <!-- FILE: view.xml -->
+  <!-- AUTHOR: Hani KATTI-->
+
   <!-- .....................GESTION................................ -->
   <!-- PATIENT-->
   <record model="ir.actions.act_window" id="action_list_patient">
@@ -283,6 +286,37 @@
         <field name="state"/>
         <field name="price" sum="Total"/>
       </tree>
+    </field>
+   </record>
+
+
+   <record model="ir.actions.act_window" id="action_list_vehicule">
+    <field name="name">Vehicule</field>
+    <field name="res_model">clinic.vehicule</field>
+    <field name="view_mode">tree,form</field>
+   </record>
+
+   <menuitem id="vehicule_menu" name="Vehicule" parent="clinic.menu"
+   action="action_list_vehicule"/>
+
+   <record model="ir.ui.view" id="vehicule_form">
+    <field name="name">clinic.vehicule.form</field>
+    <field name="model">clinic.vehicule</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="type_id" options="{'no_create_edit': False}"/>
+            <field name="matricule"/>
+          </group>
+          <group>
+            <field name="state"/>
+            <field name="purchase_date"/>
+            <field name="price"/>
+          </group>
+        </sheet>
+      </form>
     </field>
    </record>
 
