@@ -320,6 +320,23 @@
     </field>
    </record>
 
+   <record model="ir.ui.view" id="vehicule_tree">
+    <field name="name">clinic.vehicule.tree</field>
+    <field name="model">clinic.vehicule</field>
+    <field name="arch" type="xml">
+      <tree string="Liste des Consultations"
+            decoration-success="state == 'available'"
+            decoration-warning="state == 'in_use'"
+            decoration-danger="state == 'repair'"
+            decoration-muted="state == 'broken'">
+        <field name="name"/>
+        <field name="type_id"/>
+        <field name="matricule"/>
+        <field name="state"/>
+      </tree>
+    </field>
+   </record>
+
   <!--......................OPERATION............................-->
   <!--INTERVENTIONS-->
    <record model="ir.actions.act_window" id="action_list_intervention">

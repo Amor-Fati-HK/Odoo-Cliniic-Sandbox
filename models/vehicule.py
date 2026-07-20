@@ -31,7 +31,7 @@ class vehicule(models.Model):
     state=fields.Selection([
         ('available','Disponible'),
         ('in_use','En cours dutilisation'),
-        ('repair', 'En maintenance'),
+        ('repair', 'En Reparation'),
         ('broken', 'Hors service'),
     ], string="Etat", default='available')
     
