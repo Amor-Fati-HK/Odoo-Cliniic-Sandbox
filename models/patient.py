@@ -20,6 +20,8 @@ class Patient(models.Model):
 
     consultation_ids=fields.One2many('clinic.consultation','patient_id', string="Historique des consultations")
     intervention_ids=fields.One2many('clinic.intervention','patient_id', string="Historique des interventions")
+    deplacement_ids=fields.One2many('clinic.deplacement','patient_id',string="Historique des deplacement")
+    
     surname=fields.Char(string="Prenom", required=True)
     age=fields.Integer(string="Age", compute="_compute_age", store=True, tracking=True)
     sexe=fields.Selection([('man','Homme'),

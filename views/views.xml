@@ -67,6 +67,16 @@
             </tree>
             </field>
           </group>
+          <group string="Historique des deplacements">
+            <field name="deplacement_ids" nolabel="1">
+            <tree string="Deplacements">
+              <field name="date_deplacement" string="Date et Heure"/>
+              <field name="vehicule_id" string="Vehicule"/>
+              <field name="type_id" string="Type de deplacement"/>
+              <field name="dest_address" string="Destination"/>
+            </tree>
+            </field>
+          </group>
         </sheet>
       </form>
     </field>
@@ -385,6 +395,42 @@
         <field name="medecin_id"/>
         <field name="patient_state"/>
       </tree>
+    </field>
+   </record>
+
+
+  <!--DEPLACEMENTS-->
+   <record model="ir.actions.act_window" id="action_list_deplacement">
+    <field name="name">Deplacements</field>
+    <field name="res_model">clinic.deplacement</field>
+    <field name="view_mode">tree,form</field>
+   </record>
+
+   <menuitem id="deplacement_id" name="Deplacement" parent="operation_menu" action="action_list_deplacement"/>
+
+   <record model="ir.ui.view" id="deplacement_form">
+    <field name="name">clinic.deplacement.form</field>
+    <field name="model">clinic.deplacement</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group>
+            <group>
+              <field name="type_id"/>
+              <field name="vehicule_id"/>
+              <field name="patient_id"/>
+              <field name="driver_id" options="{'no_create_edit': False}"/>
+            </group>
+            <group string="Trajet">
+              <field name="start_address"/>
+              <field name="dest_address"/>
+            </group>
+          </group>
+          <group string="Itineraire Google Maps" attrs="{'invisible':[('map_iframe','=',False)]}">
+            <field name="map_iframe" nolabel="1" colspan="2"/>
+          </group>
+        </sheet>
+      </form>
     </field>
    </record>
 </odoo>

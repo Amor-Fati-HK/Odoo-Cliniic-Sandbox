@@ -34,6 +34,9 @@ class vehicule(models.Model):
         ('repair', 'En Reparation'),
         ('broken', 'Hors service'),
     ], string="Etat", default='available')
+
+
+    deplacement_ids=fields.One2many('clinic.deplacement','vehicule_id',string="Historique des deplacements")
     
 
     @api.constrains('price')
