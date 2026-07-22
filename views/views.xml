@@ -434,6 +434,7 @@
             </group>
             <group string="Trajet">
               <field name="date_deplacement"/>
+              <field name="state"/>
               <field name="start_address"/>
               <field name="dest_address"/>
             </group>
@@ -455,7 +456,11 @@
         <field name="dest_address"/>
         <field name="patient_id"/>
         <field name="type_id"/>
-        <field name="vehicule_id"/>
+        <field name="vehicule_id" 
+                    domain="[('state','=','available')]"
+                    options="{'no_create':True, 'no_open':True}"
+                    nolabel="1"
+                    colspan="2"/>
       </tree>
     </field>
    </record>
