@@ -299,7 +299,7 @@
     </field>
    </record>
 
-
+   <!--VEHICULE-->
    <record model="ir.actions.act_window" id="action_list_vehicule">
     <field name="name">Vehicule</field>
     <field name="res_model">clinic.vehicule</field>
@@ -322,8 +322,19 @@
           </group>
           <group>
             <field name="state"/>
-            <field name="purchase_date"/>
+            <field name="purchase_year"/>
+            <field name="purchase_place"/>
             <field name="price"/>
+          </group>
+          <group string="Historique des deplacements">
+            <field name="deplacement_ids" nolabel="1">
+            <tree string="Deplacements">
+              <field name="date_deplacement" string="Date et Heure"/>
+              <field name="patient_id" string="Patient"/>
+              <field name="type_id" string="Type de deplacement"/>
+              <field name="dest_address" string="Destination"/>
+            </tree>
+            </field>
           </group>
         </sheet>
       </form>
@@ -422,12 +433,48 @@
               <field name="driver_id" options="{'no_create_edit': False}"/>
             </group>
             <group string="Trajet">
+              <field name="date_deplacement"/>
               <field name="start_address"/>
               <field name="dest_address"/>
             </group>
           </group>
           <group string="Itineraire Google Maps" attrs="{'invisible':[('map_iframe','=',False)]}">
             <field name="map_iframe" nolabel="1" colspan="2"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+   </record>
+
+   <record model="ir.ui.view" id="deplacement_tree">
+    <field name="name">clinic.deplacement.tree</field>
+    <field name="model">clinic.deplacement</field>
+    <field name="arch" type="xml">
+      <tree string="Listes des deplacements">
+        <field name="date_deplacement"/>
+        <field name="dest_address"/>
+        <field name="patient_id"/>
+        <field name="type_id"/>
+        <field name="vehicule_id"/>
+      </tree>
+    </field>
+   </record>
+
+   <record model="ir.ui.view" id="driver_form">
+    <field name="name">clinic.driver.form</field>
+    <field name="model">clinic.driver</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="age"/>
+            <field name="birthday"/>
+            <field name="paper_num"/>
+          </group>
+          <group>
+            <field name="sexe"/>
+            <field name="birthday_place"/>
           </group>
         </sheet>
       </form>

@@ -15,7 +15,7 @@ class driver(models.Model):
     _name="clinic.driver"
     _description="Chauffeur du deplacement"
 
-    name=fields.Char(string="Nom", required=True)
+    name=fields.Char(string="Nom complet", required=True)
     surname=fields.Char(string="Prenom", required=True)
     age=fields.Integer(string="Age", compute="_compute_age", store=True, tracking=True)
     sexe=fields.Selection([('man','Homme'),
@@ -72,7 +72,7 @@ class deplacement(models.Model):
             if s.start_address and s.dest_address:
                 start=s.start_address.replace(' ','+')
                 dest=s.dest_address.replace(' ','+')
-                url=f"https://maps.google.com/maps?saddr={start}&amp;daddr={dest}&amp;output=embed"
+                url=url = f"https://maps.google.com/maps?saddr={start}&daddr={dest}&output=embed"
                 s.map_iframe=f'<iframe width="100%" height="400" frameborder="0" src="{url}" style="border:0; border-radius:8px;"></iframe>'
             else:
                 s.map_iframe=False
