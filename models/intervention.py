@@ -89,4 +89,20 @@ class intervention(models.Model):
                     if duplicate_patient:
                         raise ValidationError(_("Le patient %s subit deja une autre intervention le %s !") %(rec.patient_id.name, rec.date_intervention))
 
-                
+    def name_get(self):
+        result=[]
+        for rec in self:
+            patient_name=""
+            if rec.patient_id:
+                patient_name="%s %s" % (rec.patient_id.surname or '',
+                                        rec.patient_id.name or '')
+                doctor_name=rec.medecin_id.name if rec.medecin_id else ""
+
+                date_str=""
+                if rec.date_intervention:
+                    date_str=rec.date_intervention.strftime('%d/%m/%Y %H:%M')
+
+                display_name=_("Intervention du %s - %s (Dr. %s)") % (date_str,patient_name,doctor_name)
+
+            result.append((rec.id,display_name))
+        return result 

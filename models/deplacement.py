@@ -99,7 +99,24 @@ class deplacement(models.Model):
                     rec.vehicule_id.write({'state': 'available'})
                 else:
                     rec.vehicule_id.write({'state': 'in_use'})
-                    
+
+    def name_get(self):
+        result=[]
+        for rec in self:
+            patient_name=""
+            if rec.patient_id:
+                patient_name="%s %s" % (rec.patient_id.surname or '',
+                                        rec.patient_id.name or '')
+                type_name=rec.type_id if rec.type_id else ""
+
+                date_str=""
+                if rec.date_deplacement:
+                    date_str=rec.date_deplacement.strftime('%d/%m/%Y %H:%M')
+
+                display_name=_("Deplacement du %s - %s ( %s)") % (date_str,patient_name,type_name)
+
+            result.append((rec.id,display_name))
+        return result 
 
     
     

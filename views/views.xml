@@ -77,6 +77,16 @@
             </tree>
             </field>
           </group>
+          <group string="Historique des transplantations">
+            <field name="greffe_ids" nolabel="1">
+            <tree string="Transplantations">
+              <field name="date_greffe" string="Date et Heure"/>
+              <field name="donor_id" string="Donneur"/>
+              <field name="organ_id" string="Organe"/>
+              <field name="compatibility" string="Compatibilite"/>
+            </tree>
+            </field>
+          </group>
         </sheet>
       </form>
     </field>

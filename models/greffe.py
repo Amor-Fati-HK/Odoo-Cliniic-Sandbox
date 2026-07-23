@@ -183,3 +183,21 @@ class greffe(models.Model):
                     ])
                     if duplicate_patient:
                         raise ValidationError(_("Le patient %s est deja subit deja une autre greffe le %s !") %(rec.patient_id.name, rec.date_greffe))
+
+    def name_get(self):
+            result=[]
+            for rec in self:
+                patient_name=""
+                if rec.patient_id:
+                    patient_name="%s %s" % (rec.patient_id.surname or '',
+                                            rec.patient_id.name or '')
+                    doctor_name=rec.medecin_ids.name if rec.medecin_ids else ""
+    
+                    date_str=""
+                    if rec.date_greffe:
+                        date_str=rec.date_greffe.strftime('%d/%m/%Y %H:%M')
+    
+                    display_name=_("Transplantation du %s - %s (Dr. %s)") % (date_str,patient_name,doctor_name)
+    
+                result.append((rec.id,display_name))
+            return result 
