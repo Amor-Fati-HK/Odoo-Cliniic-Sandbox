@@ -22,7 +22,7 @@ class intervention(models.Model):
     _description="Intervention Clinique"
 
     patient_id=fields.Many2one('clinic.patient', ondelete="cascade", string="Patient", required=True)
-    medecin_id=fields.Many2one('clinic.medecin', ondelete="cascade",string="Medecin", required=True)
+    medecin_id=fields.Many2many('clinic.medecin', ondelete="cascade",string="Medecin(s)", required=True)
     material_ids=fields.Many2many('clinic.material', string="Materiel Utilise")
 
     type_id=fields.Many2one('clinic.intervention.type',string="Type d'intervention",required=True)

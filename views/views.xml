@@ -229,6 +229,7 @@
             </group>
             <group>
               <field name="prix_consultation"/>
+              <field name="salle_consultation"/>
             </group>
           </group>
         </sheet>
