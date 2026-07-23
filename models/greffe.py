@@ -6,6 +6,8 @@ Transplantation model for the clinic management module
 
 from odoo import models,fields,api,_
 from odoo.exceptions import ValidationError
+from datetime import date, timedelta
+
 
 class organ(models.Model):
     _name="clinic.organ"
@@ -53,7 +55,7 @@ class donor(models.Model):
                 s.age = today.year - s.birthday.year - ((today.month, today.day) < (s.birthday.month, s.birthday.day))
             else:
                 s.age = 0
-                
+
     @api.depends('height', 'weight')
     def _compute_imc(self):
         for r in self:
@@ -67,7 +69,7 @@ class greffe(models.Model):
     _name="clinic.greffe"
     _description="Greffe d'organe"
 
-    patient_id=fields.Many2one('clinic.patient', string="patient", required=True)
+    patient_id=fields.Many2one('clinic.patient', string="Patient", required=True)
     donor_id=fields.Many2one('clinic.donor', string="Donneur",required=True)
     medecin_ids=fields.Many2many('clinic.medecin',string="Chirurgien(s)",required=True)
     material_ids=fields.Many2many('clinic.material', string="Materiel Utilise")

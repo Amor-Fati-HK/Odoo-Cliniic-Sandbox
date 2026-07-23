@@ -488,4 +488,96 @@
       </form>
     </field>
    </record>
+
+
+   <!--GREFFES-->
+   <record model="ir.actions.act_window" id="action_list_greffe">
+    <field name="name">Greffe</field>
+    <field name="res_model">clinic.greffe</field>
+    <field name="view_mode">tree,form</field>
+   </record>
+
+   <menuitem id="greffe_menu" name="Transplantation" parent="operation_menu" action="action_list_greffe"/>
+
+   <record model="ir.ui.view" id="greffe_form">
+    <field name="name">clinic.greffe.form</field>
+    <field name="model">clinic.greffe</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group>
+            <group string="Information general">
+              <field name="patient_id"/>
+              <field name="donor_id" options="{'no_create_edit': False}"/>
+              <field name="medecin_ids"/>
+            </group>
+            <group string="Patient HLA">
+              <field name="hla_a1"/>
+              <field name="hla_a2"/>
+              <field name="hla_b1"/>
+              <field name="hla_b2"/>
+              <field name="hla_dr1"/>
+              <field name="hla_dr2"/>
+              <field name="compatibility"/>
+            </group>
+            <group>
+              <field name="date_greffe"/>
+              <field name="salle_greffe"/>
+              <field name="patient_state"/>
+            </group>
+          </group>
+        </sheet>
+      </form>
+    </field>
+   </record>
+
+   <record model="ir.ui.view" id="greffe_tree">
+    <field name="name">clinic.greffe.tree</field>
+    <field name="model">clinic.greffe</field>
+    <field name="arch" type="xml">
+      <tree string="Liste des greffes">
+        <field name="date_greffe"/>
+        <field name="patient_id"/>
+        <field name="donor_id"/>
+        <field name="patient_state"/>
+        <field name="salle_greffe"/>
+      </tree>
+    </field>
+   </record>
+   <record model="ir.ui.view" id="donor_form">
+    <field name="name">clinic.donor.form</field>
+    <field name="model">clinic.donor</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group>
+            <group string="Information general">
+              <field name="name"/>
+              <field name="surname"/> 
+              <field name="age"/> 
+              <field name="sexe"/>
+            </group>
+            <group>
+              <field name="height"/>
+              <field name="weight"/>
+              <field name="blood"/>
+              <field name="imc"/>
+            </group>
+          </group>
+          <group>
+            <field name="birthday"/>
+            <field name="birthday_place"/>
+          </group>
+          <group string="Patient HLA">
+              <field name="hla_a1"/>
+              <field name="hla_a2"/>
+              <field name="hla_b1"/>
+              <field name="hla_b2"/>
+              <field name="hla_dr1"/>
+              <field name="hla_dr2"/>
+            </group>
+        </sheet>
+      </form>
+    </field>
+   </record>
 </odoo>

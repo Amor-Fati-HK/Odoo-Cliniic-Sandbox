@@ -10,3 +10,6 @@ access_clinic_vehicule_type,clinic.vehicule.type,model_clinic_vehicule_type,base
 access_clinic_vehicule,clinic.vehicule,model_clinic_vehicule,base.group_user,1,1,1,1
 access_clinic_driver,clinic.driver,model_clinic_driver,base.group_user,1,1,1,1
 access_clinic_deplacement,clinic.deplacement,model_clinic_deplacement,base.group_user,1,1,1,1
+access_clinic_organ,clinic.organ,model_clinic_organ,base.group_user,1,1,1,1
+access_clinic_donor,clinic.donor,model_clinic_donor,base.group_user,1,1,1,1
+access_clinic_greffe,clinic.greffe,model_clinic_greffe,base.group_user,1,1,1,1
