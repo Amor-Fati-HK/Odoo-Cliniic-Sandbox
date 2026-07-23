@@ -246,7 +246,7 @@
         <field name="patient_id"/>
         <field name="medecin_id"/>
         <field name="diagnostic"/>
-        <field name="prix_consultation" sum="Total"/>
+        <field name="salle_consultation"/>
       </tree>
     </field>
    </record>
@@ -402,11 +402,12 @@
     <field name="model">clinic.intervention</field>
     <field name="arch" type="xml">
       <tree string="Liste des Interventions">
-        <field name="type_id"/>
         <field name="date_intervention"/>
+        <field name="type_id"/>
         <field name="patient_id"/>
         <field name="medecin_id"/>
         <field name="patient_state"/>
+        <field name="salle_intervention"/>
       </tree>
     </field>
    </record>

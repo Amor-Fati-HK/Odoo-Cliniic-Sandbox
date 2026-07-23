@@ -24,7 +24,7 @@ class consultation(models.Model):
     temperature=fields.Float(string="Temperature", required=False)
     tension=fields.Char(string="Tension arterielle")
     prix_consultation=fields.Float(string="Prix (DZD)", default=2000.0)
-    salle_consultation=fields.Integer(string="Salle", required=True)
+    salle_consultation=fields.Integer(string="Salle de consultation", required=True)
 
 
     state=fields.Selection([
