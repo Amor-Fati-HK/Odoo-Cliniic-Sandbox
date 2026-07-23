@@ -383,6 +383,7 @@
           </group>
           <group>
             <field name="date_intervention"/>
+            <field name="salle_intervention"/>
             <field name="material_ids"/>
             <field name="patient_state"/>
           </group>
