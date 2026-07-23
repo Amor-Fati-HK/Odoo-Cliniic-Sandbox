@@ -80,4 +80,13 @@ class intervention(models.Model):
                     ])
                     if duplicate_room:
                         raise ValidationError(_("La salle numero %s est deja reservee pour une autre intervention le %s !") % (rec.salle_intervention, rec.date_intervention))
+                if rec.patient_id:
+                    duplicate_patient=self.search([
+                        ('date_intervention','=',rec.date_intervention),
+                        ('patient_id','=',rec.patient_id.id),
+                        ('id','!=',rec.id)
+                    ])
+                    if duplicate_patient:
+                        raise ValidationError(_("Le patient %s subit deja une autre intervention le %s !") %(rec.patient_id.name, rec.date_intervention))
+
                 

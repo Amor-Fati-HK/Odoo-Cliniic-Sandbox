@@ -84,4 +84,12 @@ class consultation(models.Model):
                     ])
                     if duplicate_room:
                         raise ValidationError(_("La salle numero %s est deja reservee pour une autre consultation le %s !") % (rec.salle_consultation, rec.date_consultation))
-                    
+                if rec.patient_id:
+                    duplicate_patient=self.search([
+                        ('date_consultation','=',rec.date_consultation),
+                        ('patient_id','=',rec.patient_id.id),
+                        ('id','!=',rec.id)
+                    ])
+                    if duplicate_patient:
+                        raise ValidationError(_("Le patient %s est deja en pleine consultation le %s !") %(rec.patient_id.name, rec.date_consultation))
+    

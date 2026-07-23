@@ -509,6 +509,7 @@
             <group string="Information general">
               <field name="patient_id"/>
               <field name="donor_id" options="{'no_create_edit': False}"/>
+              <field name="organ_id"/>
               <field name="medecin_ids"/>
             </group>
             <group string="Patient HLA">

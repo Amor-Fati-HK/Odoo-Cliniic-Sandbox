@@ -71,6 +71,7 @@ class greffe(models.Model):
 
     patient_id=fields.Many2one('clinic.patient', string="Patient", required=True)
     donor_id=fields.Many2one('clinic.donor', string="Donneur",required=True)
+    organ_id=fields.Many2one('clinic.organ', string="Organe", required=True)
     medecin_ids=fields.Many2many('clinic.medecin',string="Chirurgien(s)",required=True)
     material_ids=fields.Many2many('clinic.material', string="Materiel Utilise")
 
@@ -82,7 +83,7 @@ class greffe(models.Model):
     hla_dr2 = fields.Char(string="HLA - DR (Allèle 2)", help="Exemple: 15:01")
     compatibility=fields.Char(string="Compatibilite", compute="_compute_compatibility")
 
-    date_greffe=fields.Datetime(string="Date et Heure")
+    date_greffe=fields.Datetime(string="Date et Heure", required=True)
     salle_greffe=fields.Integer(string="Salle")
     patient_state=fields.Selection([
         ('dead','Decede'),
@@ -153,3 +154,32 @@ class greffe(models.Model):
                 status="Incompatible"
             rec.compatibility=f"{status} (Mismatches HLA: {mismatch}/6)"
 
+    @api.constrains('date_greffe','medecin_ids','salle_greffe')
+    def _check_greffe_overlap(self):
+        for rec in self:
+            if rec.date_greffe:
+                duplicate_doctor=self.search([
+                    ('date_greffe','=',rec.date_greffe),
+                    ('medecin_ids','=',rec.medecin_ids.id),
+                    ('id','!=',rec.id)
+                ])
+                if duplicate_doctor:
+                    raise ValidationError(_("Le medecin %s est deja occupe par une autre greffe le %s !") %(rec.medecin_ids.name, rec.date_greffe))
+
+                if rec.salle_greffe:
+                    duplicate_room=self.search([
+                        ('date_greffe','=',rec.date_greffe),
+                        ('salle_greffe','=',rec.salle_greffe),
+                        ('id','!=',rec.id)
+                    ])
+                    if duplicate_room:
+                        raise ValidationError(_("La salle numero %s est deja reservee pour une autre greffe le %s !") % (rec.salle_greffe, rec.date_greffe))
+
+                if rec.patient_id:
+                    duplicate_patient=self.search([
+                        ('date_greffe','=',rec.date_greffe),
+                        ('patient_id','=',rec.patient_id.id),
+                        ('id','!=',rec.id)
+                    ])
+                    if duplicate_patient:
+                        raise ValidationError(_("Le patient %s est deja subit deja une autre greffe le %s !") %(rec.patient_id.name, rec.date_greffe))
