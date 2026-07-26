@@ -1,6 +1,6 @@
 """
 File: medecin.py
-Author: Hani Katti
+Author: HK
 Doctor model for the clinic management
 """
 

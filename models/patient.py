@@ -1,6 +1,6 @@
 """
 File : patient.py
-Author: Hani Katti
+Author: HK
 Patient model for the clinic management
 
 """

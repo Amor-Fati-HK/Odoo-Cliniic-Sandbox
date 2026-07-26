@@ -1,6 +1,6 @@
 """
 File: vehicule.py
-Author: Hani KATTI
+Author: HK
 Car model for the clinic management module
 
 """

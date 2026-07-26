@@ -1,6 +1,6 @@
 <odoo>
   <!-- FILE: view.xml -->
-  <!-- AUTHOR: Hani KATTI-->
+  <!-- AUTHOR: HK -->
 
   <!-- .....................GESTION................................ -->
   <!-- PATIENT-->
@@ -470,10 +470,7 @@
         <field name="patient_id"/>
         <field name="type_id"/>
         <field name="vehicule_id" 
-                    domain="[('state','=','available')]"
-                    options="{'no_create':True, 'no_open':True}"
-                    nolabel="1"
-                    colspan="2"/>
+                    options="{'no_create':True, 'no_open':True}"/>
       </tree>
     </field>
    </record>

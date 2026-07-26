@@ -1,6 +1,6 @@
 """
 File: intervention.py
-Author: Hani Katti
+Author: HK
 Intervention model for the clinic module
 
 """
@@ -49,7 +49,7 @@ class intervention(models.Model):
             for record in self:
                 record._sync_patient_state(vals['patient_state'])
         return res
-    
+
     def _sync_patient_state(self, state):
         
         if state == 'dead' and self.patient_id:

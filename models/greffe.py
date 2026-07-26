@@ -1,6 +1,6 @@
 """
 File: greffe.py
-Author: Hani Katti
+Author: HK
 Transplantation model for the clinic management module
 """
 

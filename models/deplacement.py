@@ -1,6 +1,6 @@
 """
 File: deplacement.py
-Author: Hani KATTI
+Author: HK
 Medical Travel model for the clinic management module
 
 """
@@ -24,6 +24,10 @@ class driver(models.Model):
     birthday=fields.Date(string="Date de Naissance", required=True)
     birthday_place=fields.Char(string="Lieu de Naissance", required=False, default="Algerie")
     paper_num=fields.Integer(string="Numero national", required=True)
+
+    _sql_constraints=[
+            ('name_unique','UNIQUE(name)','Ce chauffeur existe deja !')
+    ]
     
     @api.depends('birthday')
     def _compute_age(self):
@@ -56,7 +60,7 @@ class deplacement(models.Model):
         ('house_care','Soin a domicile'),
         ('routine','Routine'),
     ], string="Type de deplacement", required=True)    
-    vehicule_id=fields.Many2one('clinic.vehicule',string="Vehicule utilise",required=True)
+    vehicule_id=fields.Many2one('clinic.vehicule',string="Vehicule utilise",required=True, domain="[('state', '=', 'available')]")
     patient_id=fields.Many2one('clinic.patient',string="Patient transporte",required=True)
     driver_id=fields.Many2one('clinic.driver',string="Chauffeur", required=True)
 

@@ -1,6 +1,6 @@
 """
 File: materiel.py
-Author: Hani Katti
+Author: HK
 Material model for the clinic management module
 
 """
