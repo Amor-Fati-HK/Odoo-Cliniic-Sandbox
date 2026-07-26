@@ -118,5 +118,23 @@ class deplacement(models.Model):
             result.append((rec.id,display_name))
         return result 
 
-    
-    
+    @api.constrains('date_deplacement','driver_id','patient_id')
+    def _check_travel_overlap(self):
+        for rec in self:
+            if rec.date_deplacement:
+                duplicate_driver=self.search([
+                    ('date_deplacement','=',rec.date_deplacement),
+                    ('driver_id','=',rec.driver_id.id),
+                    ('id','!=',rec.id)
+                ])
+                if duplicate_driver:
+                    raise ValidationError(_("Le chauffeur %s est deja occupe par un autre deplacement le %s !") %(rec.driver_id.name, rec.date_deplacement))
+
+                if rec.patient_id:
+                    duplicate_patient=self.search([
+                        ('date_deplacement','=',rec.date_deplacement),
+                        ('patient_id','=',rec.patient_id.id),
+                        ('id','!=',rec.id)
+                    ])
+                    if duplicate_patient:
+                        raise ValidationError(_("Le patient %s est deja en plein deplacement le %s !") %(rec.patient_id.name, rec.date_deplacement))
