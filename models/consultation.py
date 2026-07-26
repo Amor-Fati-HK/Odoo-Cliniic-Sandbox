@@ -13,6 +13,7 @@ class consultation(models.Model):
 
     patient_id=fields.Many2one('clinic.patient', ondelete="cascade", string="Patient", required=True)
     medecin_id=fields.Many2one('clinic.medecin', ondelete="cascade",string="Medecin", required=True)
+    room_id=fields.Many2one('clinic.room', string="Salle de consultation", required=True)
     material_ids=fields.Many2many('clinic.material', string="Materiel Utilise")
     material_count=fields.Integer(compute="_compute_material_count")
     date_consultation=fields.Datetime(string="Date et Heure",
@@ -24,7 +25,6 @@ class consultation(models.Model):
     temperature=fields.Float(string="Temperature", required=False)
     tension=fields.Char(string="Tension arterielle")
     prix_consultation=fields.Float(string="Prix (DZD)", default=2000.0)
-    salle_consultation=fields.Integer(string="Salle de consultation", required=True)
 
 
     state=fields.Selection([

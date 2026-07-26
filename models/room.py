@@ -22,6 +22,10 @@ class bloc(models.Model):
     bloc_num=fields.Integer(string="Numero du Bloc", required=True, help="Exp: 1")
     etage=fields.Integer(string="Etage", required=True)
     type_id=fields.Many2one('clinic.bloc.type',string="Type de bloc", required=True)
+    role=fields.Selection([
+        ('consult','Consultation'),
+        ('intervention','Intervention'),
+    ], string="Dédié aux ", required=True)
 
     _sql_constraints=[
             ('bloc_unique','UNIQUE(bloc_num)','Ce bloc existe deja !')
@@ -32,7 +36,7 @@ class bloc(models.Model):
         for rec in self:
             if rec.bloc_num:
                 display_name=_("Bloc %s")%(rec.bloc_num)
-            result.append(rec.id,display_name)
+            result.append((rec.id,display_name))
         return result
 
 class room_type(models.Model):
@@ -48,10 +52,13 @@ class room(models.Model):
     _name="clinic.room"
     _description="Salle clinique"
 
-    bloc_id=fields.Many2one(string="Bloc", required=True)
+    bloc_id=fields.Many2one('clinic.bloc',string="Bloc", required=True)
     room_num=fields.Integer(string="Numero de salle", required=True)
     room_full_num=fields.Integer(string="Salle", compute="_compute_room_full_num")
-    type_id=fields.Many2one(string="Type de salle", required=True)
+    type_id=fields.Many2one('clinic.room.type',string="Type de salle", required=True)
+    bloc_role=fields.Selection(related="bloc_id.role", string="Role du bloc", readonly=True)
+    consultation_ids=fields.One2many('clinic.consultation','room_id',
+                                     string="Historique des consultations")
     
 
     num_bed=fields.Integer(string="Nombre de Lits", required=False)
@@ -78,9 +85,9 @@ class room(models.Model):
         for s in self:
             if s.bloc_id:
                 if s.room_num:
-                    s.room_full_num=(s.bloc_id*100)+s.room_num
+                    s.room_full_num=(s.bloc_id.bloc_num*100)+s.room_num
                 else:
-                    s.room_full_name=0
+                    s.room_full_num=0
             else:
                 s.room_full_name=0
 
@@ -89,7 +96,7 @@ class room(models.Model):
         for rec in self:
             if rec.room_full_num:
                 display_name=_("Salle %s")%(rec.room_full_num)
-            result.append(rec.id,display_name)
+            result.append((rec.id,display_name))
         return result
 
     

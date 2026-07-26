@@ -239,7 +239,7 @@
             </group>
             <group>
               <field name="prix_consultation"/>
-              <field name="salle_consultation"/>
+              <field name="room_id"/>
             </group>
           </group>
         </sheet>
@@ -256,8 +256,72 @@
         <field name="patient_id"/>
         <field name="medecin_id"/>
         <field name="diagnostic"/>
-        <field name="salle_consultation"/>
+        <field name="room_id"/>
       </tree>
+    </field>
+   </record>
+
+  <!-- SALLES -->
+
+   <record model="ir.actions.act_window" id="action_list_room">
+    <field name="name">Salles/Bloc</field>
+    <field name="res_model">clinic.room</field>
+    <field name="view_mode">tree,form,kanban</field>
+   </record>
+
+   <menuitem id="room_menu" name="Salles" parent="clinic_menu" 
+   action="action_list_room"/>
+
+   <record model="ir.ui.view" id="room_form">
+    <field name="name">clinic.room.form</field>
+    <field name="model">clinic.room</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <field name="bloc_role" invisible="1"/>
+          <group>
+            <field name="bloc_id"/>
+            <field name="room_num"/>
+            <field name="room_full_num"/>
+            <field name="type_id"/>
+          </group>
+          <group>
+            <field name="num_bed"/>
+          </group>
+          <group string="Historique des patients"
+          attrs="{'invisible':[('bloc_role','!=','consult')]}">
+            <field name="consultation_ids" nolabel="1">
+             <tree string="Consultations">
+                <field name="date_consultation" string="Date et Heure"/>
+                <field name="patient_id" string="Patient"/>
+                <field name="medecin_id" string="Medecin"/>
+                <field name="diagnostic" string="Diagnostic"/>
+              </tree>
+            </field>
+          </group>
+          <group string="Patients actuels"
+          attrs="{'invisible':[('bloc_role','!=','intervention')]}">
+            <field name="patient_ids" nolabel="1">
+             <tree string="Patients">
+                <field name="name" string="Nom"/>
+                <field name="surname" string="Prenom"/>
+                <field name="age" string="Age"/>
+                <field name="sexe" string="Sexe"/>
+              </tree>
+            </field>
+          </group>
+          <group string="Medecin Assignes">
+            <field name="medecin_ids" nolabel="1">
+             <tree string="Medecins">
+                <field name="name" string="Nom"/>
+                <field name="surname" string="Prenom"/>
+                <field name="age" string="Age"/>
+                <field name="sexe" string="Sexe"/>
+              </tree>
+            </field>
+          </group>
+        </sheet>
+      </form>
     </field>
    </record>
 

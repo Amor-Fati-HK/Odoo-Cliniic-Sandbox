@@ -35,6 +35,10 @@ class intervention(models.Model):
         ('stable','Stable'),
         ('healed','Guerri'),
     ])
+    intervention_state=fields.Selection([
+        ('in_progress','En cours'),
+        ('ended','Termine'),
+    ], string="Etat de l'intervention")
 
     @api.model
     def create(self, vals):
