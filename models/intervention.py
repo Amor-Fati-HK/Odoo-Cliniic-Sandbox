@@ -28,7 +28,7 @@ class intervention(models.Model):
     type_id=fields.Many2one('clinic.intervention.type',string="Type d'intervention",required=True)
     date_intervention=fields.Datetime(string="Date et Heure", required=True)    
     description=fields.Text(string="Description")
-    salle_intervention=fields.Many2one('clinic.room',string="Salle d'intervention", domain="[('bloc_role', '=', 'intervention')]")
+    salle_intervention=fields.Many2one('clinic.room',string="Salle d'intervention", domain="[('bloc_role', '=', 'intervention'), ('disponibility','=', True)]")
     patient_state=fields.Selection([
         ('dead','Decede'),
         ('critic','Critique'),
@@ -37,7 +37,7 @@ class intervention(models.Model):
     ])
     intervention_state=fields.Selection([
         ('in_progress','En cours'),
-        ('ended','Termine'),
+        ('ended','Terminer'),
     ], string="Etat de l'intervention")
 
     @api.model
@@ -45,7 +45,6 @@ class intervention(models.Model):
         record = super(intervention, self).create(vals)
         if 'patient_state' in vals:
             record._sync_patient_state(vals['patient_state'])
-        record._update_room_state()
         return record
 
     def write(self, vals):
@@ -53,15 +52,32 @@ class intervention(models.Model):
         if 'patient_state' in vals:
             for record in self:
                 record._sync_patient_state(vals['patient_state'])
-        if 'intervention_state' in vals or 'salle_intervention' in vals or 'patient_id' in vals:
-            for record in self:
-                record._update_room_state()
         return res
 
     def _sync_patient_state(self, state):
-        
+        """Synchronise patient state"""
         if state == 'dead' and self.patient_id:
             self.patient_id.write({'decease': True})
+
+    def action_start(self):
+        """Starts the intervention"""
+        for s in self:
+            s.intervention_state='in_progress'
+            if s.salle_intervention and s.patient_id:
+                s.salle_intervention.write({
+                    'disponibility': False,
+                    'patient_ids':[(4,s.patient_id.id)]
+                })
+
+    def action_end(self):
+        """End the intervention"""
+        for s in self:
+            s.intervention_state='ended'
+            if s.salle_intervention and s.patient_id:
+                s.salle_intervention.write({
+                    'disponibility': True,
+                    'patient_ids':[(3,s.patient_id.id)]
+                })
 
     def _update_room_state(self):
         """Update method for room state"""

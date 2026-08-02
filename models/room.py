@@ -64,6 +64,7 @@ class room(models.Model):
     num_bed=fields.Integer(string="Nombre de Lits", required=False)
     patient_ids=fields.Many2many('clinic.patient', string="Patients")
     medecin_ids=fields.Many2many('clinic.medecin', string="Medecin assignes")
+    disponibility=fields.Boolean(string="Disponibilite" ,default=True,)
 
     @api.constrains('num_bed')
     def _check_num_bed(self):

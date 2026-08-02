@@ -463,6 +463,12 @@
     <field name="model">clinic.intervention</field>
     <field name="arch" type="xml">
       <form>
+        <header>
+          <button name="action_start" string="Demarrer l'intervention"
+          type="object" class="oe_highlight"/>
+          <button name="action_end" string="Terminer l'intervention"
+          type="object" class="oe_highlight" attrs="{'invisible': [('intervention_state', '!=', 'in_progress')]}"/>
+        </header>
         <sheet>
           <group>
             <field name="patient_id"/>
