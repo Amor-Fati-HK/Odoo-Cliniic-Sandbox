@@ -28,7 +28,7 @@ class intervention(models.Model):
     type_id=fields.Many2one('clinic.intervention.type',string="Type d'intervention",required=True)
     date_intervention=fields.Datetime(string="Date et Heure", required=True)    
     description=fields.Text(string="Description")
-    salle_intervention=fields.Integer(string="Salle d'intervention", required=True)
+    salle_intervention=fields.Many2one('clinic.room',string="Salle d'intervention", domain="[('bloc_role', '=', 'intervention')]")
     patient_state=fields.Selection([
         ('dead','Decede'),
         ('critic','Critique'),
@@ -45,6 +45,7 @@ class intervention(models.Model):
         record = super(intervention, self).create(vals)
         if 'patient_state' in vals:
             record._sync_patient_state(vals['patient_state'])
+        record._update_room_state()
         return record
 
     def write(self, vals):
@@ -52,12 +53,29 @@ class intervention(models.Model):
         if 'patient_state' in vals:
             for record in self:
                 record._sync_patient_state(vals['patient_state'])
+        if 'intervention_state' in vals or 'salle_intervention' in vals or 'patient_id' in vals:
+            for record in self:
+                record._update_room_state()
         return res
 
     def _sync_patient_state(self, state):
         
         if state == 'dead' and self.patient_id:
             self.patient_id.write({'decease': True})
+
+    def _update_room_state(self):
+        """Update method for room state"""
+        for rec in self:
+            if rec.salle_intervention and rec.patient_id:
+                if rec.intervention_state == 'in_progress':
+                    rec.salle_intervention.write({
+                        'patient_ids':[(4,rec.patient_id.id)]
+                    })
+                elif rec.intervention_state== 'ended':
+                    rec.salle_intervention.write({
+                        'patient_ids':[(3,rec.patient_id.id)]
+                    })
+
 
     @api.model
     def _register_hook(self):
@@ -70,7 +88,7 @@ class intervention(models.Model):
             if rec.date_intervention:
                 duplicate_doctor=self.search([
                     ('date_intervention','=',rec.date_intervention),
-                    ('medecin_id','=',rec.medecin_id.id),
+                    ('medecin_id','=',rec.medecin_id.ids),
                     ('id','!=',rec.id)
                 ])
                 if duplicate_doctor:
@@ -79,7 +97,7 @@ class intervention(models.Model):
                 if rec.salle_intervention:
                     duplicate_room=self.search([
                         ('date_intervention','=',rec.date_intervention),
-                        ('salle_intervention','=',rec.salle_intervention),
+                        ('salle_intervention','=',rec.salle_intervention.id),
                         ('id','!=',rec.id)
                     ])
                     if duplicate_room:

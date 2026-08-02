@@ -325,6 +325,20 @@
     </field>
    </record>
 
+   <record model="ir.ui.view" id="room_tree">
+    <field name="name">clinic.room.tree</field>
+    <field name="model">clinic.room</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="room_full_num"/>
+        <field name="bloc_id"/>
+        <field name="type_id"/>
+        <field name="num_bed"/>
+      </tree>
+    </field>
+   </record>
+   
+
   <!--MATERIEL-->
    <record model="ir.actions.act_window" id="action_list_material">
     <field name="name">Inventaire Materiel</field>
@@ -460,6 +474,7 @@
             <field name="salle_intervention"/>
             <field name="material_ids"/>
             <field name="patient_state"/>
+            <field name="intervention_state"/>
           </group>
           <notebook>
             <page string="Description">

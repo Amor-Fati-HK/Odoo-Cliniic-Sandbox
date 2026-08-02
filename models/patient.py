@@ -42,6 +42,8 @@ class Patient(models.Model):
     decease=fields.Boolean(string="Decede", store=True, default=False, tracking=True)
     decease_cause=fields.Char(string="Cause du deces", tracking=True)
     medical_antecedant=fields.Text(string="Antecedant Medicaux")
+
+    
     
     @api.constrains('age')
     def _check_age_validation(self):
