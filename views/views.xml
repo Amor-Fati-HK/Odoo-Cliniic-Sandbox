@@ -734,17 +734,60 @@
     <field name="view_id" ref="patient_graph_blood"/> <!-- Liaison directe -->
   </record>
 
+  <record model="ir.ui.view" id="patient_pivot_indicators">
+    <field name="name">clinic.patient.pivot.indicators</field>
+    <field name="model">clinic.patient</field>
+    <field name="arch" type="xml">
+      <pivot string="Indicateurs Clés">
+        <field name="patient_count" type="measure"/>
+        <field name="age" type="measure" string="Age moyen"/>
+        <field name="height" type="measure" string="Taille Moyen" />
+        <field name="weight" type="measure" string="Poids Moyen" />
+        <field name="sportif_rate" type="measure"/>
+        <field name="decease_rate" type="measure"/>
+      </pivot>
+    </field>
+  </record>
+
+  <record model="ir.actions.act_window" id="action_report_patient_indicators">
+    <field name="name">Indicateurs Cles Patients</field>
+    <field name="res_model">clinic.patient</field>
+    <field name="view_mode">pivot</field>
+    <field name="view_id" ref="patient_pivot_indicators"/>
+  </record>
+
+  <record model="ir.ui.view" id="patient_graph_sport">
+    <field name="name">clinic.patient.graph.sport</field>
+    <field name="model">clinic.patient</field>
+    <field name="arch" type="xml">
+      <graph string="Patient sportifs(ves)" type="bar" stacked="True">
+        <field name="sexe" type="row"/>
+        <field name="sportif_count" type="col"/>
+        <field name="patient_count" type="measure"/>
+      </graph>
+    </field>
+  </record>
+
+  <record model="ir.actions.act_window" id="action_report_patient_sport">
+    <field name="name">Patients Sportifs</field>
+    <field name="res_model">clinic.patient</field>
+    <field name="view_mode">graph</field>
+    <field name="view_id" ref="patient_graph_sport"/>
+  </record>
+
   <record model="ir.ui.view" id="board_patient_analysis_view">
     <field name="name">clinic.patient.board</field>
     <field name="model">board.board</field>
     <field name="arch" type="xml">
-      <form string="Tableau de bord de la Clinique">
+      <form string="Patients">
         <board style="1-1">
           <column>
             <action name="%(action_report_patient_gender)d" string="Répartition par Genre"/>
+            <action name="%(action_report_patient_indicators)d" string="Indicateur Cles (Moyenne &amp; Totaux)"/>
           </column>
           <column>
             <action name="%(action_report_patient_blood)d" string="Répartition par Groupe Sanguin"/>
+            <action name="%(action_report_patient_sport)d" string="Taux de Sportifs"/>
           </column>
         </board>
       </form>
@@ -752,7 +795,7 @@
   </record>
 
   <record model="ir.actions.act_window" id="action_open_clinic_board">
-    <field name="name">Tableau De bord Patients</field>
+    <field name="name">Patients</field>
     <field name="res_model">board.board</field>
     <field name="view_mode">form</field>
     <field name="usage">menu</field>
@@ -761,6 +804,6 @@
 
   <menuitem id="menu_reporting_root" name="Analyses" parent="main_clinic_menu" sequence="90"/>
   
-  <menuitem id="menu_clinic_dashboard" name="Tableau de bord" 
+  <menuitem id="menu_clinic_dashboard" name="Patients" 
             parent="menu_reporting_root" action="action_open_clinic_board" sequence="10"/>
 </odoo>

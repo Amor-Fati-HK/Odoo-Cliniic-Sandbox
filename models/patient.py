@@ -41,12 +41,12 @@ class Patient(models.Model):
     greffe_ids=fields.One2many('clinic.greffe','patient_id',string="Historique des transplantations")
     
     surname=fields.Char(string="Prenom", required=True)
-    age=fields.Integer(string="Age", compute="_compute_age", store=True, tracking=True)
+    age=fields.Integer(string="Age", compute="_compute_age", store=True, tracking=True, group_operator="avg")
     sexe=fields.Selection([('man','Homme'),
                            ('woman','Femme')], default='man', string="Genre", required=True)
-    height=fields.Float(string="Taille actuelle", help="Taille en centimetre")
-    weight=fields.Float(string="Poids actuel", help="Taille en kilogrammes")
-    imc=fields.Float(string="IMC", compute="_compute_imc",help="Indice de Masse Corporelle")
+    height=fields.Float(string="Taille", help="Taille en centimetre",group_operator="avg")
+    weight=fields.Float(string="Poids", help="Taille en kilogrammes",group_operator="avg")
+    imc=fields.Float(string="IMC", compute="_compute_imc",help="Indice de Masse Corporelle",group_operator="avg")
 
     birthday=fields.Date(string="Date de Naissance", required=True)
     birthday_place=fields.Char(string="Lieu de Naissance", required=False, default="Algerie")
@@ -56,10 +56,26 @@ class Patient(models.Model):
     mother_name=fields.Char(string="Nom de la mere", tracking=True)
     profession=fields.Char(string="Profession", required=False)
     sportif=fields.Boolean(string="Sportif")
+    sportif_count=fields.Integer(string="Nombre de sportif",
+                                 compute="_compute_indicators", store=True)
+    sportif_rate=fields.Float(string="Sportif (%)", compute="_compute_clinic_rates", store=True, group_operator="avg")
     decease=fields.Boolean(string="Decede", store=True, default=False, tracking=True)
     decease_cause=fields.Many2one('clinic.patient.decease',string="Cause du deces",required=True)
+    decease_count=fields.Integer(string="Nombre de Deces",
+                                 compute="_compute_indicators", store=True)
+    decease_rate=fields.Float(string="Deces (%)", compute="_compute_clinic_rates", store=True, group_operator="avg")
     medical_antecedant=fields.Text(string="Antecedant Medicaux")
     patient_count=fields.Integer(string="Patients", compute="_compute_patient_count",store=True)
+
+    def _compute_clinic_rates(self):
+        """Compute clinic stats"""
+        total_patients=self.search_count([]) or 1
+        total_sportifs=self.search_count([('sportif','=',True)])
+        total_decease=self.search_count([('decease','=',True)])
+
+        for r in self:
+            r.sportif_rate=(total_sportifs / total_patients)*100.0
+            r.decease_rate=(total_decease / total_patients)*100.0
 
     @api.depends('name')
     def _compute_patient_count(self):
@@ -108,6 +124,9 @@ class Patient(models.Model):
         self._cr.execute("UPDATE ir_ui_view SET active = false WHERE arch_db LIKE '%has_chart_of_accounts%';")
         return super(Patient, self)._register_hook()
 
-    
+    @api.depends('sportif', 'decease')
+    def _compute_indicators(self):
 
-            
+        for r in self:
+            r.sportif_count= 1 if r.sportif else 0
+            r.decease_count= 1 if r.decease else 0
