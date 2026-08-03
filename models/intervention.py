@@ -34,7 +34,7 @@ class intervention(models.Model):
         ('critic','Critique'),
         ('stable','Stable'),
         ('healed','Guerri'),
-    ])
+    ], string="Etat du patient", required=True)
     intervention_state=fields.Selection([
         ('in_progress','En cours'),
         ('ended','Terminer'),
@@ -78,20 +78,6 @@ class intervention(models.Model):
                     'disponibility': True,
                     'patient_ids':[(3,s.patient_id.id)]
                 })
-
-    def _update_room_state(self):
-        """Update method for room state"""
-        for rec in self:
-            if rec.salle_intervention and rec.patient_id:
-                if rec.intervention_state == 'in_progress':
-                    rec.salle_intervention.write({
-                        'patient_ids':[(4,rec.patient_id.id)]
-                    })
-                elif rec.intervention_state== 'ended':
-                    rec.salle_intervention.write({
-                        'patient_ids':[(3,rec.patient_id.id)]
-                    })
-
 
     @api.model
     def _register_hook(self):

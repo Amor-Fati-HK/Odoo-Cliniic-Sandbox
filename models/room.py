@@ -63,6 +63,7 @@ class room(models.Model):
 
     num_bed=fields.Integer(string="Nombre de Lits", required=False)
     patient_ids=fields.Many2many('clinic.patient', string="Patients")
+    intervention_ids=fields.One2many('clinic.intervention','salle_intervention', string="Intervention")
     medecin_ids=fields.Many2many('clinic.medecin', string="Medecin assignes")
     disponibility=fields.Boolean(string="Disponibilite" ,default=True,)
 

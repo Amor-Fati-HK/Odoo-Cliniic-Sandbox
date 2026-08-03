@@ -11,6 +11,23 @@ from odoo import models,fields,api, _
 from odoo.exceptions import ValidationError
 from datetime import date, timedelta
 
+class decease_cause(models.Model):
+    _name="clinic.patient.decease"
+    _description="Mort patient"
+
+    name=fields.Selection([
+        ('Diag_error','Erreur de diagnostic'),
+        ('medication_incident','Incident de medication'), #
+        ('interventionnal_incident','Incident interventionnel'),
+        ('IAS','Infection Associes aux Soins'),
+        ('Surveil_failure','Defaut de surveillance'),
+        ('Communication problem','Probleme de communication'),
+    ],string="Cause", required=True)
+
+    surveil_salle=fields.Many2one('clinic.room',string="Salle",required=True)
+    medecin_ids=fields.Many2many('clinic.medecin', string="Medecins responsables", required=True)
+    description=fields.Text(string="Description", required=True)
+
 class Patient(models.Model):
     _name="clinic.patient"
     _description="Clinic Patient"
@@ -40,10 +57,14 @@ class Patient(models.Model):
     profession=fields.Char(string="Profession", required=False)
     sportif=fields.Boolean(string="Sportif")
     decease=fields.Boolean(string="Decede", store=True, default=False, tracking=True)
-    decease_cause=fields.Char(string="Cause du deces", tracking=True)
+    decease_cause=fields.Many2one('clinic.patient.decease',string="Cause du deces",required=True)
     medical_antecedant=fields.Text(string="Antecedant Medicaux")
+    patient_count=fields.Integer(string="Patients", compute="_compute_patient_count",store=True)
 
-    
+    @api.depends('name')
+    def _compute_patient_count(self):
+        for r in self:
+            r.patient_count=1
     
     @api.constrains('age')
     def _check_age_validation(self):
@@ -81,7 +102,12 @@ class Patient(models.Model):
             else:
                 s.age=0
     
-            
+    @api.model
+    def _register_hook(self):
+        """Désactive automatiquement la vue corrompue des paramètres au démarrage du serveur"""
+        self._cr.execute("UPDATE ir_ui_view SET active = false WHERE arch_db LIKE '%has_chart_of_accounts%';")
+        return super(Patient, self)._register_hook()
+
     
 
             

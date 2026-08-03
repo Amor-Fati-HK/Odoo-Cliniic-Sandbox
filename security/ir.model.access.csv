@@ -17,3 +17,4 @@ access_clinic_bloc_type,clinic.bloc.type,model_clinic_bloc_type,base.group_user,
 access_clinic_bloc,clinic.bloc,model_clinic_bloc,base.group_user,1,1,1,1
 access_clinic_room_type,clinic.room.type,model_clinic_room_type,base.group_user,1,1,1,1
 access_clinic_room,clinic.room,model_clinic_room,base.group_user,1,1,1,1
+access_clinic_patient_decease,clinic.patient.decease,model_clinic_patient_decease,base.group_user,1,1,1,1

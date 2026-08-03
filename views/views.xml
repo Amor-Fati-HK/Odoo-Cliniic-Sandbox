@@ -48,45 +48,55 @@
                       'required':[('decease','=', True)]
                    }"/>
           </group>
-          <group string="Historique des consultations">
-            <field name="consultation_ids" nolabel="1">
-             <tree string="Consultations" decoration-info="prix_consultation &gt; 2000">
-                <field name="date_consultation" string="Date et Heure"/>
-                <field name="medecin_id" string="Medecin Traitant"/>
-                <field name="diagnostic" string="Diagnostic resume"/>
-                <field name="prix_consultation" string="Montant(DZD)" sum="Total"/>
-              </tree>
-            </field>
-          </group>
-          <group string="Historique des interventions">
-            <field name="intervention_ids" nolabel="1">
-            <tree string="Interventions">
-              <field name="date_intervention" string="Date et Heure"/>
-              <field name="medecin_id" string="Medecin Traitant"/>
-              <field name="type_id" string="Type d'intervention"/>
-            </tree>
-            </field>
-          </group>
-          <group string="Historique des deplacements">
-            <field name="deplacement_ids" nolabel="1">
-            <tree string="Deplacements">
-              <field name="date_deplacement" string="Date et Heure"/>
-              <field name="vehicule_id" string="Vehicule"/>
-              <field name="type_id" string="Type de deplacement"/>
-              <field name="dest_address" string="Destination"/>
-            </tree>
-            </field>
-          </group>
-          <group string="Historique des transplantations">
-            <field name="greffe_ids" nolabel="1">
-            <tree string="Transplantations">
-              <field name="date_greffe" string="Date et Heure"/>
-              <field name="donor_id" string="Donneur"/>
-              <field name="organ_id" string="Organe"/>
-              <field name="compatibility" string="Compatibilite"/>
-            </tree>
-            </field>
-          </group>
+          <notebook>
+            <page string="Consultations">
+              <group string="Historique des consultations">
+                <field name="consultation_ids" nolabel="1">
+                <tree string="Consultations" decoration-info="prix_consultation &gt; 2000">
+                    <field name="date_consultation" string="Date et Heure"/>
+                    <field name="medecin_id" string="Medecin Traitant"/>
+                    <field name="diagnostic" string="Diagnostic resume"/>
+                    <field name="prix_consultation" string="Montant(DZD)" sum="Total"/>
+                  </tree>
+                </field>
+              </group>
+            </page>
+            <page string="Interventions">
+              <group string="Historique des interventions">
+                <field name="intervention_ids" nolabel="1">
+                <tree string="Interventions">
+                  <field name="date_intervention" string="Date et Heure"/>
+                  <field name="medecin_id" string="Medecin Traitant"/>
+                  <field name="type_id" string="Type d'intervention"/>
+                </tree>
+                </field>
+              </group>
+            </page>
+            <page string="Deplacements">
+              <group string="Historique des deplacements">
+                <field name="deplacement_ids" nolabel="1">
+                <tree string="Deplacements">
+                  <field name="date_deplacement" string="Date et Heure"/>
+                  <field name="vehicule_id" string="Vehicule"/>
+                  <field name="type_id" string="Type de deplacement"/>
+                  <field name="dest_address" string="Destination"/>
+                </tree>
+                </field>
+              </group>
+            </page>
+            <page string="Transplantations">
+              <group string="Historique des transplantations">
+                <field name="greffe_ids" nolabel="1">
+                <tree string="Transplantations">
+                  <field name="date_greffe" string="Date et Heure"/>
+                  <field name="donor_id" string="Donneur"/>
+                  <field name="organ_id" string="Organe"/>
+                  <field name="compatibility" string="Compatibilite"/>
+                </tree>
+                </field>
+              </group>
+            </page>
+          </notebook>
         </sheet>
       </form>
     </field>
@@ -177,7 +187,7 @@
     <field name="arch" type="xml">
       <graph string="Taux de medecin par services" type="bar">
         <field name="service"/>
-        <field name="medecin_count" type="measure"/>
+        <field name="medecin_counts" type="measure"/>
       </graph>
     </field>
   </record>
@@ -288,7 +298,7 @@
           <group>
             <field name="num_bed"/>
           </group>
-          <group string="Historique des patients"
+          <group string="Historique des consultations"
           attrs="{'invisible':[('bloc_role','!=','consult')]}">
             <field name="consultation_ids" nolabel="1">
              <tree string="Consultations">
@@ -299,14 +309,15 @@
               </tree>
             </field>
           </group>
-          <group string="Patients actuels"
+          <group string="Historique des interventions"
           attrs="{'invisible':[('bloc_role','!=','intervention')]}">
-            <field name="patient_ids" nolabel="1">
-             <tree string="Patients">
-                <field name="name" string="Nom"/>
-                <field name="surname" string="Prenom"/>
-                <field name="age" string="Age"/>
-                <field name="sexe" string="Sexe"/>
+            <field name="intervention_ids" nolabel="1">
+             <tree string="Interventions">
+                <field name="date_intervention" string="Date et Heure"/>
+                <field name="type_id" string="Type d'intervention"/>
+                <field name="salle_intervention" string="Salle"/>
+                <field name="patient_id" string="Patient"/>
+                <field name="patient_state" string="etat du patient"/>
               </tree>
             </field>
           </group>
@@ -316,7 +327,7 @@
                 <field name="name" string="Nom"/>
                 <field name="surname" string="Prenom"/>
                 <field name="age" string="Age"/>
-                <field name="sexe" string="Sexe"/>
+                <field name="service" string="Service"/>
               </tree>
             </field>
           </group>
@@ -673,4 +684,83 @@
       </form>
     </field>
    </record>
+
+
+
+  <record model="ir.ui.view" id="view_patient_search_report">
+    <field name="name">clinic.patient.search.report</field>
+    <field name="model">clinic.patient</field>
+    <field name="arch" type="xml">
+      <search string="Recherche de Patients">
+        <filter name="group_by_sexe" string="Genre" context="{'group_by':'sexe'}"/>
+        <filter name="group_by_blood" string="Groupe Sanguin" context="{'group_by':'blood'}"/>
+      </search>
+    </field>
+  </record>
+
+  <record model="ir.ui.view" id="patient_graph_gender">
+    <field name="name">clinic.patient.graph.gender</field>
+    <field name="model">clinic.patient</field>
+    <field name="arch" type="xml">
+      <graph string="Patients par Genre" type="bar">
+        <field name="sexe"/> 
+        <field name="patient_count" type="measure"/>
+      </graph>
+    </field>
+  </record>
+
+  <record model="ir.ui.view" id="patient_graph_blood">
+    <field name="name">clinic.patient.graph.blood</field>
+    <field name="model">clinic.patient</field>
+    <field name="arch" type="xml">
+      <graph string="Patients par Groupe Sanguin" type="bar">
+        <field name="blood"/>
+        <field name="patient_count" type="measure"/>
+      </graph>
+    </field>
+  </record>
+
+  <record model="ir.actions.act_window" id="action_report_patient_gender">
+    <field name="name">Patient par Genre</field>
+    <field name="res_model">clinic.patient</field>
+    <field name="view_mode">graph</field>
+    <field name="view_id" ref="patient_graph_gender"/> 
+  </record>
+
+  <record model="ir.actions.act_window" id="action_report_patient_blood">
+    <field name="name">Patients par Groupe Sanguin</field>
+    <field name="res_model">clinic.patient</field>
+    <field name="view_mode">graph</field>
+    <field name="view_id" ref="patient_graph_blood"/> <!-- Liaison directe -->
+  </record>
+
+  <record model="ir.ui.view" id="board_patient_analysis_view">
+    <field name="name">clinic.patient.board</field>
+    <field name="model">board.board</field>
+    <field name="arch" type="xml">
+      <form string="Tableau de bord de la Clinique">
+        <board style="1-1">
+          <column>
+            <action name="%(action_report_patient_gender)d" string="Répartition par Genre"/>
+          </column>
+          <column>
+            <action name="%(action_report_patient_blood)d" string="Répartition par Groupe Sanguin"/>
+          </column>
+        </board>
+      </form>
+    </field>
+  </record>
+
+  <record model="ir.actions.act_window" id="action_open_clinic_board">
+    <field name="name">Tableau De bord Patients</field>
+    <field name="res_model">board.board</field>
+    <field name="view_mode">form</field>
+    <field name="usage">menu</field>
+    <field name="view_id" ref="board_patient_analysis_view"/>
+  </record>
+
+  <menuitem id="menu_reporting_root" name="Analyses" parent="main_clinic_menu" sequence="90"/>
+  
+  <menuitem id="menu_clinic_dashboard" name="Tableau de bord" 
+            parent="menu_reporting_root" action="action_open_clinic_board" sequence="10"/>
 </odoo>

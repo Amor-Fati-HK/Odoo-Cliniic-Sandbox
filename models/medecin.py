@@ -49,9 +49,14 @@ class medecin(models.Model):
     salary=fields.Float(string="Salaire", required=False, compute="_compute_salary", store=True)
     experience_here=fields.Integer(string="Experience dans cette clinique", compute="_compute_exp")
 
-    medecin_count=fields.Integer(string="Medecins",compute="_compute_medecin_count", store=True)
+    medecin_counts=fields.Integer(string="Medecins",compute="_compute_medecin_counts", store=True)
+    medecin_count=fields.Integer(string="Medecins", compute="_compute_medecin_count", store=True)
 
-   
+    @api.depends('name')
+    def _compute_medecin_count(self):
+        for s in self:
+            s.medecin_count = 1
+
     @api.depends('birthday')
     def _compute_age(self):
         """Compute method to calculate age"""
@@ -90,10 +95,10 @@ class medecin(models.Model):
                 s.experience_here=0
 
     @api.depends('name')
-    def _compute_medecin_count(self):
+    def _compute_medecin_counts(self):
         total_medecins=self.search_count([]) or 1
         for s in self:
-            s.medecin_count=(1.0/total_medecins)*100
+            s.medecin_counts=(1.0/total_medecins)*100
 
     @api.constrains('service','service_chef')
     def _check_unique_chef_per_service(self):
