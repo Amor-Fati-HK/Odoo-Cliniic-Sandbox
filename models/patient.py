@@ -66,6 +66,49 @@ class Patient(models.Model):
     decease_rate=fields.Float(string="Deces (%)", compute="_compute_clinic_rates", store=True, group_operator="avg")
     medical_antecedant=fields.Text(string="Antecedant Medicaux")
     patient_count=fields.Integer(string="Patients", compute="_compute_patient_count",store=True)
+    age_state=fields.Selection([
+        ('kid','Enfant'),
+        ('teen','Adolescent'),
+        ('young_adult','Jeune Adulte'),
+        ('adult','Adulte'),
+        ('aged','Sujet Agé'),
+        ('big_age','Grand Age'),
+    ], compute="_compute_age_state", string="Classe d'age", store=True)
+    sport_gender=fields.Selection([
+        ('m_sport','Homme Sportif'),
+        ('m_nosport','Homme Non-Sportif'),
+        ('f_sport','Femme Sportive'),
+        ('f_nosport','Femme Non-Sportive'),
+    ], string="Genre et Sport", compute="_compute_sport_gender",store=True)
+
+    @api.depends('sexe','sportif')
+    def _compute_sport_gender(self):
+        """Associate each patient at its combined category genre + sport"""
+        for r in self:
+            if r.sexe=='man':
+                r.sport_gender='m_sport' if r.sportif else 'm_nosport'
+            elif r.sexe=='woman':
+                r.sport_gender='f_sport' if r.sportif else 'f_nosport'
+            else:
+                r.sport_gender=False
+
+
+    @api.depends('age')
+    def _compute_age_state(self):
+        for s in self:
+            if s.age:
+                if s.age<12:
+                    s.age_state='kid'
+                elif s.age<18:
+                    s.age_state='teen'
+                elif s.age<26:
+                    s.age_state='young_adult'
+                elif s.age<60:
+                    s.age_state='adult'
+                elif s.age<75:
+                    s.age_state='aged'
+                else:
+                    s.age_state='big_age'
 
     def _compute_clinic_rates(self):
         """Compute clinic stats"""
@@ -120,9 +163,12 @@ class Patient(models.Model):
     
     @api.model
     def _register_hook(self):
-        """Désactive automatiquement la vue corrompue des paramètres au démarrage du serveur"""
-        self._cr.execute("UPDATE ir_ui_view SET active = false WHERE arch_db LIKE '%has_chart_of_accounts%';")
+        """Force le calcul du champ combiné pour TOUS les patients au démarrage du serveur"""
+        patients = self.search([])
+        if patients:
+            patients._compute_sport_gender()
         return super(Patient, self)._register_hook()
+
 
     @api.depends('sportif', 'decease')
     def _compute_indicators(self):

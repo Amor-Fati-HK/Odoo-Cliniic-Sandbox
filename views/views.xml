@@ -25,6 +25,7 @@
               <field name="name"/>
               <field name="surname"/> 
               <field name="age"/> 
+              <field name="age_state"/>
               <field name="sexe"/>
             </group>
             <group>
@@ -685,7 +686,8 @@
     </field>
    </record>
 
-
+<!--..........................Statistique....................................-->
+<!--PATIENT-->
 
   <record model="ir.ui.view" id="view_patient_search_report">
     <field name="name">clinic.patient.search.report</field>
@@ -760,9 +762,8 @@
     <field name="name">clinic.patient.graph.sport</field>
     <field name="model">clinic.patient</field>
     <field name="arch" type="xml">
-      <graph string="Patient sportifs(ves)" type="bar" stacked="True">
-        <field name="sexe" type="row"/>
-        <field name="sportif_count" type="col"/>
+      <graph string="Patient sportifs(ves)" type="bar">
+        <field name="sport_gender"/>
         <field name="patient_count" type="measure"/>
       </graph>
     </field>
@@ -775,6 +776,24 @@
     <field name="view_id" ref="patient_graph_sport"/>
   </record>
 
+  <record model="ir.ui.view" id="patient_graph_age">
+    <field name="name">clinic.patient.graph.age</field>
+    <field name="model">clinic.patient</field>
+    <field name="arch" type="xml">
+      <graph string="Classe d'age des Patients" type="pie">
+        <field name="patient_count" type="measure"/>
+        <field name="age_state"/>
+      </graph>
+    </field>
+  </record>
+
+  <record model="ir.actions.act_window" id="action_report_patient_age">
+    <field name="name">Classe d'age Patients</field>
+    <field name="res_model">clinic.patient</field>
+    <field name="view_mode">graph</field>
+    <field name="view_id" ref="patient_graph_age"/>
+  </record>
+
   <record model="ir.ui.view" id="board_patient_analysis_view">
     <field name="name">clinic.patient.board</field>
     <field name="model">board.board</field>
@@ -784,6 +803,7 @@
           <column>
             <action name="%(action_report_patient_gender)d" string="Répartition par Genre"/>
             <action name="%(action_report_patient_indicators)d" string="Indicateur Cles (Moyenne &amp; Totaux)"/>
+            <action name="%(action_report_patient_age)d" string="Repartition par classe d'age"/>
           </column>
           <column>
             <action name="%(action_report_patient_blood)d" string="Répartition par Groupe Sanguin"/>
@@ -802,7 +822,7 @@
     <field name="view_id" ref="board_patient_analysis_view"/>
   </record>
 
-  <menuitem id="menu_reporting_root" name="Analyses" parent="main_clinic_menu" sequence="90"/>
+  <menuitem id="menu_reporting_root" name="Statistique" parent="main_clinic_menu" sequence="90"/>
   
   <menuitem id="menu_clinic_dashboard" name="Patients" 
             parent="menu_reporting_root" action="action_open_clinic_board" sequence="10"/>
