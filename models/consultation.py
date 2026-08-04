@@ -25,6 +25,9 @@ class consultation(models.Model):
     temperature=fields.Float(string="Temperature", required=False)
     tension=fields.Char(string="Tension arterielle")
     prix_consultation=fields.Float(string="Prix (DZD)", default=2000.0)
+    service=fields.Selection(related='medecin_id.service', string="Service du medecin", store=True)
+    consultation_count=fields.Integer(string="Consultations",
+    consultation="_compute_consultation_count", store=True)
 
 
     state=fields.Selection([
@@ -33,6 +36,12 @@ class consultation(models.Model):
         ('done','Terminé'),
         ('cancel','Annulé'),
     ], string="Statut", default='draft', traking=True)
+
+    @api.depends('patient_id')
+    def _compute_consultation_count(self):
+        """Computes number of consultation for the stat view"""
+        for r in self:
+            r.consultation_count=1
 
     @api.depends('material_ids')
     def _compute_material_count(self):

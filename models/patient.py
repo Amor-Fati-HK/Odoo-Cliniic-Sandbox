@@ -27,6 +27,13 @@ class decease_cause(models.Model):
     surveil_salle=fields.Many2one('clinic.room',string="Salle",required=True)
     medecin_ids=fields.Many2many('clinic.medecin', string="Medecins responsables", required=True)
     description=fields.Text(string="Description", required=True)
+    decease_count=fields.Integer(string="Occurences",
+    compute="_compute_decease_count", store=True)
+
+    @api.depends('name')
+    def _compute_decease_count(self):
+        for r in self:
+            r.decease_count=1
 
 class Patient(models.Model):
     _name="clinic.patient"

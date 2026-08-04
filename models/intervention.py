@@ -39,6 +39,14 @@ class intervention(models.Model):
         ('in_progress','En cours'),
         ('ended','Terminer'),
     ], string="Etat de l'intervention")
+    intervention_count=fields.Integer(string="Interventions",
+    compute="_compute_intervention_count", store=True)
+
+    @api.depends('patient_id')
+    def _compute_intervention_count(self):
+        """Computes the number of intervention for the stat view"""
+        for r in self:
+            r.intervention_count=1
 
     @api.model
     def create(self, vals):

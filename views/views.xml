@@ -826,4 +826,93 @@
   
   <menuitem id="menu_clinic_dashboard" name="Patients" 
             parent="menu_reporting_root" action="action_open_clinic_board" sequence="10"/>
+              
+  <!--Operations-->
+
+  <record model="ir.ui.view" id="consultation_graph_service">
+    <field name="name">clinic.consultation.graph.service</field>
+    <field name="model">clinic.consultation</field>
+    <field name="arch" type="xml">
+      <graph string="Consultation par Service" type="pie">
+        <field name="service"/>
+        <field name="consultation_count" type="measure"/>
+      </graph>
+    </field>
+  </record>
+
+  <record model="ir.ui.view" id="intervention_graph_state">
+    <field name="name">clinic.intervention.graph.state</field>
+    <field name="model">clinic.intervention</field>
+    <field name="arch" type="xml">
+      <graph string="Bilan des Interventions" type="pie">
+        <field name="patient_state"/>
+        <field name="intervention_count" type="measure"/>
+      </graph>
+    </field>
+  </record>
+
+  <record model="ir.ui.view" id="decease_graph_cause">
+    <field name="name">clinic.patient.decease.graph.cause</field>
+    <field name="model">clinic.patient.decease</field>
+    <field name="arch" type="xml">
+      <graph string="Causes de decesles plus frequentes">
+        <field name="name"/>
+        <field name="decease_count" type="measure"/>
+      </graph>
+    </field>
+  </record>
+
+  <record model="ir.actions.act_window" id="action_report_consultation_service">
+    <field name="name">Consultations par Service</field>
+    <field name="res_model">clinic.consultation</field>
+    <field name="view_mode">graph</field>
+    <field name="view_id" ref="consultation_graph_service"/>
+  </record>
+
+  <record model="ir.actions.act_window" id="action_report_intervention_state">
+    <field name="name">Bilan des Interventions</field>
+    <field name="res_model">clinic.intervention</field>
+    <field name="view_mode">graph</field>
+    <field name="view_id" ref="intervention_graph_state"/>
+  </record>
+
+  <record model="ir.actions.act_window" id="action_report_decease_cause">
+    <field name="name">Analyse des causes de deces</field>
+    <field name="res_model">clinic.patient.decease</field>
+    <field name="view_mode">graph</field>
+    <field name="view_id" ref="decease_graph_cause"/>
+  </record>
+
+  <record model="ir.ui.view" id="board_operation_analysis_view">
+    <field name="name">clinic.operation.board</field>
+    <field name="model">board.board</field>
+    <field name="arch" type="xml">
+      <form string="Tableau de Bord des Operatoins">
+        <board style="2-1">
+          <column>
+            <action name="%(action_report_consultation_service)d" string="Volume
+            des Consultations par Service"/>
+            <action name="%(action_report_decease_cause)d" string="Analyse des Causes
+            les plus frequentes"/>
+          </column>
+          <column>
+            <action name="%(action_report_intervention_state)d" string="Taux de
+            Reussite / Echec (Interventions)"/>
+          </column>
+        </board>
+      </form>
+    </field>
+  </record>
+
+  <record model="ir.actions.act_window" id="action_open_operation_board">
+    <field name="name">Opérations</field>
+    <field name="res_model">board.board</field>
+    <field name="view_mode">form</field>
+    <field name="usage">menu</field>
+    <field name="view_id" ref="board_operation_analysis_view"/>
+  </record>
+
+  <menuitem id="menu_operation_dashboard" name="Opérations" 
+            parent="menu_reporting_root" action="action_open_operation_board" sequence="20"/>
+
 </odoo>
