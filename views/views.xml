@@ -923,12 +923,31 @@
     <field name="view_id" ref="greffe_graph_compatibility"/>
   </record>
 
+  <record model="ir.ui.view" id="deplacement_graph_type">
+    <field name="name">clinic.deplacement.graph.type</field>
+    <field name="model">clinic.deplacement</field>
+    <field name="arch" type="xml">
+      <graph string="Type de deplacement" type="bar">
+        <field name="type_id"/>
+        <field name="type_id"/>
+        <field name="deplacement_count" type="measure"/>
+      </graph> 
+    </field>
+  </record>
+
+  <record model="ir.actions.act_window" id="action_report_deplacement_type">
+    <field name="name">Type de deplacement</field>
+    <field name="res_model">clinic.deplacement</field>
+    <field name="view_mode">graph</field>
+    <field name="view_id" ref="deplacement_graph_type"/>
+  </record>
+
   <record model="ir.ui.view" id="board_operation_analysis_view">
     <field name="name">clinic.operation.board</field>
     <field name="model">board.board</field>
     <field name="arch" type="xml">
       <form string="Tableau de Bord des Operatoins">
-        <board style="1-1-1">
+        <board style="1-1">
           <column>
             <action name="%(action_report_consultation_service)d" string="Volume
             des Consultations par Service"/>
@@ -940,6 +959,7 @@
             <action name="%(action_report_intervention_state)d" string="Taux de
             Reussite / Echec des Interventions"/>
             <action name="%(action_report_greffe_organ)d" string="Organes greffés (Transplantations)"/>
+            <action name="%(action_report_deplacement_type)d" string="Statistique des type de deplacement"/>
           </column>
         </board>
       </form>

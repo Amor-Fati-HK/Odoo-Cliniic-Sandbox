@@ -70,6 +70,12 @@ class deplacement(models.Model):
     state=fields.Boolean(string="Termine", default=False)
 
     map_iframe=fields.Html(string="Carte du trajet", compute="_compute_map_iframe")
+    deplacement_count=fields.Integer(string="Nombre de deplacement", compute="_compute_deplacement_count", store=True)
+
+    @api.depends('patient_id')
+    def _compute_deplacement_count(self):
+        for r in self:
+            r.deplacement_count=1
 
     @api.depends('start_address','dest_address')
     def _compute_map_iframe(self):
