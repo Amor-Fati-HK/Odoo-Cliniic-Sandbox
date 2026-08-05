@@ -81,17 +81,17 @@ class greffe(models.Model):
     hla_b2 = fields.Char(string="HLA - B (Allèle 2)", help="Exemple: 44:01")
     hla_dr1 = fields.Char(string="HLA - DR (Allèle 1)", help="Exemple: 03:01")
     hla_dr2 = fields.Char(string="HLA - DR (Allèle 2)", help="Exemple: 15:01")
-    compatibility=fields.Char(string="Compatibilite", compute="_compute_compatibility")
+    compatibility=fields.Char(string="Compatibilite", compute="_compute_compatibility", store=True)
 
     date_greffe=fields.Datetime(string="Date et Heure", required=True)
     salle_greffe=fields.Integer(string="Salle")
     greffe_count=fields.Integer(string="Nombre de greffe",compute="_compute_greffe_count", store=True)
     patient_state=fields.Selection([
-        ('dead','Decede'),
         ('critic','Critique'),
         ('stable','Stable'),
         ('healed','Guerri'),
-     ])
+        ('dead','Decede'),
+     ], string="Etat du patient", default="healed", required=True)
 
     @api.depends('patient_id')
     def _compute_greffe_count(self):

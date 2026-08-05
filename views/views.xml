@@ -847,7 +847,8 @@
     <field name="model">clinic.intervention</field>
     <field name="arch" type="xml">
       <graph string="Bilan des Interventions" type="bar">
-        <field name="patient_state" type="row"/>
+        <field name="patient_state"/>
+        <field name="patient_state"/>
         <field name="intervention_count" type="measure"/>
       </graph>
     </field>
@@ -904,17 +905,36 @@
     <field name="view_id" ref="greffe_graph_organ"/>
   </record>
 
+  <record model="ir.ui.view" id="greffe_graph_compatibility">
+    <field name="name">clinic.greffe.graph.compatibility</field>
+    <field name="model">clinic.greffe</field>
+    <field name="arch" type="xml">
+      <graph string="Compatibilite" type="pie">
+        <field name="compatibility"/>
+        <field name="greffe_count" type="measure"/>
+      </graph>
+    </field>
+  </record>
+
+  <record model="ir.actions.act_window" id="action_report_greffe_compatibility">
+    <field name="name">Compatibilite des greffes</field>
+    <field name="res_model">clinic.greffe</field>
+    <field name="view_mode">graph</field>
+    <field name="view_id" ref="greffe_graph_compatibility"/>
+  </record>
+
   <record model="ir.ui.view" id="board_operation_analysis_view">
     <field name="name">clinic.operation.board</field>
     <field name="model">board.board</field>
     <field name="arch" type="xml">
       <form string="Tableau de Bord des Operatoins">
-        <board style="2-1">
+        <board style="1-1-1">
           <column>
             <action name="%(action_report_consultation_service)d" string="Volume
             des Consultations par Service"/>
             <action name="%(action_report_decease_cause)d" string="Causes de décès
             les plus frequentes"/>
+            <action name="%(action_report_greffe_compatibility)d" string="Compatibilite des organes (Transplantations)"/>
           </column>
           <column>
             <action name="%(action_report_intervention_state)d" string="Taux de
