@@ -977,4 +977,54 @@
   <menuitem id="menu_operation_dashboard" name="Opérations" 
             parent="menu_reporting_root" action="action_open_operation_board" sequence="20"/>
 
+
+  <record model="ir.actions.act_window" id="action_list_service">
+    <field name="name">Service Publique</field>
+    <field name="res_model">clinic.service</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <menuitem id="contact_menu" name="Contact" parent="main_clinic_menu"/>
+  <menuitem id="service_menu" name="Service Publique" parent="contact_menu" action="action_list_service"/>
+
+  <record model="ir.ui.view" id="service_form">
+    <field name="name">clinic.service.form</field>
+    <field name="model">clinic.service</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="code"/>
+            <field name="service_type"/>
+          </group>
+          <group>
+            <field name="contact_person"/>
+            <field name="phone"/>
+            <field name="email"/>
+            <field name="address"/>
+          </group>
+
+          <notebook>
+            <page string="Information supplementaire">
+              <field name="description"/>
+            </page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record model="ir.ui.view" id="service_tree">
+    <field name="name">clinic.service.tree</field>
+    <field name="model">clinic.service</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="name"/>
+        <field name="service_type"/>
+        <field name="phone"/>
+        <field name="email"/>
+      </tree>
+    </field>
+  </record>
 </odoo>

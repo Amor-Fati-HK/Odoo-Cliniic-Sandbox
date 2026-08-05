@@ -9,3 +9,4 @@ from . import vehicule
 from . import deplacement
 from . import greffe
 from . import room
+from . import service
