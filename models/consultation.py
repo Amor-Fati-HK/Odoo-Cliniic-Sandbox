@@ -29,6 +29,7 @@ class consultation(models.Model):
     consultation_count=fields.Integer(string="Consultations",
     compute="_compute_consultation_count", store=True)
 
+    salle_consultation=fields.Many2one('clinic.room',string="Salle")
 
     state=fields.Selection([
         ('draft','Brouillon'),

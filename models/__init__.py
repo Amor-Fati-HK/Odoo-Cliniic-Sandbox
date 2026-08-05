@@ -10,3 +10,4 @@ from . import deplacement
 from . import greffe
 from . import room
 from . import service
+from . import hospital
