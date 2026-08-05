@@ -214,6 +214,7 @@
               <field name="patient_id"/>
               <field name="medecin_id"/>
               <field name="date_consultation"/>
+              <field name="service"/>
             </group>
             <group>
               <field name="symptoms"/>
@@ -734,6 +735,7 @@
     <field name="res_model">clinic.patient</field>
     <field name="view_mode">graph</field>
     <field name="view_id" ref="patient_graph_blood"/> <!-- Liaison directe -->
+    <field name="domain">[('blood', '!=', False)]</field>
   </record>
 
   <record model="ir.ui.view" id="patient_pivot_indicators">
@@ -844,8 +846,8 @@
     <field name="name">clinic.intervention.graph.state</field>
     <field name="model">clinic.intervention</field>
     <field name="arch" type="xml">
-      <graph string="Bilan des Interventions" type="pie">
-        <field name="patient_state"/>
+      <graph string="Bilan des Interventions" type="bar">
+        <field name="patient_state" type="row"/>
         <field name="intervention_count" type="measure"/>
       </graph>
     </field>
@@ -855,7 +857,7 @@
     <field name="name">clinic.patient.decease.graph.cause</field>
     <field name="model">clinic.patient.decease</field>
     <field name="arch" type="xml">
-      <graph string="Causes de decesles plus frequentes">
+      <graph string="Causes de deces les plus frequentes">
         <field name="name"/>
         <field name="decease_count" type="measure"/>
       </graph>
@@ -874,6 +876,7 @@
     <field name="res_model">clinic.intervention</field>
     <field name="view_mode">graph</field>
     <field name="view_id" ref="intervention_graph_state"/>
+    <field name="domain">[('patient_state', '!=', False)]</field>
   </record>
 
   <record model="ir.actions.act_window" id="action_report_decease_cause">
@@ -881,6 +884,24 @@
     <field name="res_model">clinic.patient.decease</field>
     <field name="view_mode">graph</field>
     <field name="view_id" ref="decease_graph_cause"/>
+  </record>
+
+  <record model="ir.ui.view" id="greffe_graph_organ">
+    <field name="name">clinic.greffe.graph.organ</field>
+    <field name="model">clinic.greffe</field>
+    <field name="arch" type="xml">
+      <graph string="Organe greffe" type="pie">
+        <field name="organ_id"/>
+        <field name="greffe_count" type="measure"/>
+      </graph>
+    </field>
+  </record>
+
+  <record model="ir.actions.act_window" id="action_report_greffe_organ">
+    <field name="name">Organe greffe</field>
+    <field name="res_model">clinic.greffe</field>
+    <field name="view_mode">graph</field>
+    <field name="view_id" ref="greffe_graph_organ"/>
   </record>
 
   <record model="ir.ui.view" id="board_operation_analysis_view">
@@ -892,12 +913,13 @@
           <column>
             <action name="%(action_report_consultation_service)d" string="Volume
             des Consultations par Service"/>
-            <action name="%(action_report_decease_cause)d" string="Analyse des Causes
+            <action name="%(action_report_decease_cause)d" string="Causes de décès
             les plus frequentes"/>
           </column>
           <column>
             <action name="%(action_report_intervention_state)d" string="Taux de
-            Reussite / Echec (Interventions)"/>
+            Reussite / Echec des Interventions"/>
+            <action name="%(action_report_greffe_organ)d" string="Organes greffés (Transplantations)"/>
           </column>
         </board>
       </form>

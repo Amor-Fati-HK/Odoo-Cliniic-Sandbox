@@ -85,14 +85,19 @@ class greffe(models.Model):
 
     date_greffe=fields.Datetime(string="Date et Heure", required=True)
     salle_greffe=fields.Integer(string="Salle")
+    greffe_count=fields.Integer(string="Nombre de greffe",compute="_compute_greffe_count", store=True)
     patient_state=fields.Selection([
         ('dead','Decede'),
         ('critic','Critique'),
         ('stable','Stable'),
         ('healed','Guerri'),
      ])
-    
 
+    @api.depends('patient_id')
+    def _compute_greffe_count(self):
+        for r in self:
+            r.greffe_count=1
+    
     @api.depends('patient_id', 'donor_id', 'hla_a1', 'hla_a2', 'hla_b1', 'hla_b2', 'hla_dr1', 'hla_dr2')
     def _compute_compatibility(self):
         """Compute the compatibility"""

@@ -27,7 +27,7 @@ class consultation(models.Model):
     prix_consultation=fields.Float(string="Prix (DZD)", default=2000.0)
     service=fields.Selection(related='medecin_id.service', string="Service du medecin", store=True)
     consultation_count=fields.Integer(string="Consultations",
-    consultation="_compute_consultation_count", store=True)
+    compute="_compute_consultation_count", store=True)
 
 
     state=fields.Selection([
@@ -120,4 +120,12 @@ class consultation(models.Model):
 
                 result.append((rec.id,display_name))
             return result
+
+    @api.model
+    def _register_hook(self):
+        """Force la valeur 1 sur toutes les consultations existantes en base"""
+        consultations = self.search([])
+        if consultations:
+            consultations._compute_consultation_count()
+        return super(consultation, self)._register_hook()
         
